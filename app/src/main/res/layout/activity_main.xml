@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/recorderBtn"
         android:layout_width="62dp"
         android:layout_height="62dp"
         app:icon="@android:drawable/ic_btn_speak_now"
@@ -15,7 +15,7 @@
         tools:layout_editor_absoluteY="228dp" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/playerBtn"
         android:layout_width="62dp"
         android:layout_height="62dp"
         app:backgroundTint="#4CAF50"
@@ -24,14 +24,14 @@
         tools:layout_editor_absoluteY="228dp" />
 
     <SeekBar
-        android:id="@+id/seekBar"
+        android:id="@+id/scrubberSld"
         android:layout_width="170dp"
         android:layout_height="62dp"
         tools:layout_editor_absoluteX="163dp"
         tools:layout_editor_absoluteY="228dp" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/deleteAudioBtn"
         android:layout_width="62dp"
         android:layout_height="62dp"
         app:backgroundTint="#F44336"
@@ -39,5 +39,29 @@
         app:iconTint="#FFFFFF"
         tools:layout_editor_absoluteX="345dp"
         tools:layout_editor_absoluteY="228dp" />
+
+    <Button
+        android:id="@+id/takePictureBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Take Picture"
+        tools:layout_editor_absoluteX="42dp"
+        tools:layout_editor_absoluteY="332dp" />
+
+    <Button
+        android:id="@+id/selectPhotoBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Photo"
+        tools:layout_editor_absoluteX="235dp"
+        tools:layout_editor_absoluteY="332dp" />
+
+    <ImageView
+        android:id="@+id/noteImg"
+        android:layout_width="247dp"
+        android:layout_height="229dp"
+        tools:layout_editor_absoluteX="82dp"
+        tools:layout_editor_absoluteY="406dp"
+        tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
