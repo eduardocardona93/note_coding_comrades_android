@@ -9,6 +9,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,8 +29,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -47,14 +51,19 @@ public class MainActivity extends AppCompatActivity {
     private List<String> permissions = new ArrayList<>();
     private List<String> permissionsRejected = new ArrayList<>();
 
-    TextView logitudeTV, latitudeTV;
+    TextView locationDetailsTV,logitudeTV, latitudeTV;
+    Geocoder geocoder;
+    List<Address> addresses;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        geocoder = new Geocoder(this,Locale.getDefault());
         logitudeTV = findViewById(R.id.logitudeTV);
         latitudeTV = findViewById(R.id.latitudeTV);
+        locationDetailsTV = findViewById(R.id.locationDetailsTV);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         // add permissions
@@ -100,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 if (location != null) {
                     logitudeTV.setText(String.format("Lng: %s", location.getLongitude()));
                     latitudeTV.setText(String.format("Lat: %s", location.getLatitude()));
+                    locationDetailsTV.setText(String.format("Accuracy: %s,Altitude: %s", location.getAccuracy(), location.getAltitude()));
                 }
             }
         });
@@ -123,6 +133,23 @@ public class MainActivity extends AppCompatActivity {
                     Location location = locationResult.getLastLocation();
                     logitudeTV.setText(String.format("Lng: %s", location.getLongitude()));
                     latitudeTV.setText(String.format("Lat: %s", location.getLatitude()));
+                    try {
+                        addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+                        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                        String city = addresses.get(0).getLocality();
+                        String state = addresses.get(0).getAdminArea();
+                        String country = addresses.get(0).getCountryName();
+                        String postalCode = addresses.get(0).getPostalCode();
+                        String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+                        locationDetailsTV.setText(String.format("Accuracy: %s,Altitude: %s \n %s, %s, %s, %s, %s ,%s",
+                                location.getAccuracy(), location.getAltitude() , address, city, state, country, postalCode, knownName
+                        ));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
                 }
             }
         };
