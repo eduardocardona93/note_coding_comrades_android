@@ -10,58 +10,112 @@
         android:id="@+id/recorderBtn"
         android:layout_width="62dp"
         android:layout_height="62dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="52dp"
         app:icon="@android:drawable/ic_btn_speak_now"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="228dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/playerBtn"
         android:layout_width="62dp"
         android:layout_height="62dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="52dp"
         app:backgroundTint="#4CAF50"
         app:icon="@android:drawable/ic_media_play"
-        tools:layout_editor_absoluteX="92dp"
-        tools:layout_editor_absoluteY="228dp" />
+        app:layout_constraintStart_toEndOf="@+id/recorderBtn"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <SeekBar
         android:id="@+id/scrubberSld"
         android:layout_width="170dp"
         android:layout_height="62dp"
-        tools:layout_editor_absoluteX="163dp"
-        tools:layout_editor_absoluteY="228dp" />
+        android:layout_marginStart="9dp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginTop="52dp"
+        app:layout_constraintStart_toEndOf="@+id/playerBtn"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/deleteAudioBtn"
         android:layout_width="62dp"
         android:layout_height="62dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="52dp"
         app:backgroundTint="#F44336"
         app:icon="@android:drawable/ic_delete"
         app:iconTint="#FFFFFF"
-        tools:layout_editor_absoluteX="345dp"
-        tools:layout_editor_absoluteY="228dp" />
+        app:layout_constraintStart_toEndOf="@+id/scrubberSld"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/takePictureBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginLeft="42dp"
+        android:layout_marginTop="42dp"
         android:text="Take Picture"
-        tools:layout_editor_absoluteX="42dp"
-        tools:layout_editor_absoluteY="332dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recorderBtn" />
 
     <Button
         android:id="@+id/selectPhotoBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="54dp"
+        android:layout_marginLeft="54dp"
+        android:layout_marginTop="42dp"
         android:text="Select Photo"
-        tools:layout_editor_absoluteX="235dp"
-        tools:layout_editor_absoluteY="332dp" />
+        app:layout_constraintStart_toEndOf="@+id/takePictureBtn"
+        app:layout_constraintTop_toBottomOf="@+id/scrubberSld" />
 
     <ImageView
         android:id="@+id/noteImg"
         android:layout_width="247dp"
         android:layout_height="229dp"
-        tools:layout_editor_absoluteX="82dp"
-        tools:layout_editor_absoluteY="406dp"
+        android:layout_marginStart="82dp"
+        android:layout_marginLeft="82dp"
+        android:layout_marginTop="26dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/takePictureBtn"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="384dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="50dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="151dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="62dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="145dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="83dp"
+        android:layout_marginLeft="83dp"
+        android:layout_marginTop="65dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
