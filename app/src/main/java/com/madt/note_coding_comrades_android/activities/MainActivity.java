@@ -1,4 +1,4 @@
-package com.example.note_coding_comrades_android;
+package com.madt.note_coding_comrades_android.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +16,6 @@ import android.location.Location;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +32,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.madt.note_coding_comrades_android.R;
+import com.madt.note_coding_comrades_android.utilities.NoteUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         btnPlay = findViewById(R.id.playerBtn);
         btnPlay.setVisibility(View.GONE);

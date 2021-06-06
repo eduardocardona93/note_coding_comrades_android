@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.note_coding_comrades_android">
+    package="com.madt.note_coding_comrades_android">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Note_coding_comrades_android">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.madt.note_coding_comrades_android.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
