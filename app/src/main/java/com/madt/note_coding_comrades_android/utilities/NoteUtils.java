@@ -26,7 +26,7 @@ public class NoteUtils {
 
     }
 
-    public static void showProgress(Activity activity) {
+    public static void showProgressBar(Activity activity) {
     }
 
     public static void showToast(Context context, String message) {
