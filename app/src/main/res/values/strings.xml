@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">note_coding_comrades_android</string>
     <string name="ok">Ok</string>
+    <string name="save">Save</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="back">Back</string>
+    <string name="audio">Audio</string>
 </resources>

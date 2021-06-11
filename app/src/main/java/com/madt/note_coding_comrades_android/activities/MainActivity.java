@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    Button btnPlay, btnRecord;
+    Button btnPlay, btnRecord, btnPause;
     String pathSave = "";
     MediaRecorder mediaRecorder;
     SeekBar scrubberSld;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     AudioManager audioManager;
     Boolean isRecording = false, isPlaying = false;
     final private static String RECORDED_FILE = "/audio.3gp";
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         btnPlay = findViewById(R.id.playerBtn);
+        btnPause = findViewById(R.id.pauseBtn);
         btnPlay.setVisibility(View.GONE);
         btnRecord = findViewById(R.id.recorderBtn);
         scrubberSld = findViewById(R.id.scrubberSld);
