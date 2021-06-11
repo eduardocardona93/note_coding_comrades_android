@@ -4,5 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CDDC39"
-    tools:context=".activities.CategoryListActivity"/>
+    android:background="@color/light_app_color"
+    tools:context=".activities.CategoryListActivity">
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="407dp"
+        android:layout_height="51dp"
+        android:background="@color/dark_app_color"
+        android:text="Categories"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="-1dp"
+        tools:layout_editor_absoluteY="50dp" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="414dp"
+        android:layout_height="529dp"
+        android:foregroundTint="#190F0F"
+        android:scrollbars="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:layout_editor_absoluteX="-2dp"
+        tools:layout_editor_absoluteY="133dp"
+        tools:listitem="@layout/list_row_category" />
+
+    <ImageButton
+        android:id="@+id/imageButton6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_input_add"
+        tools:layout_editor_absoluteX="351dp"
+        tools:layout_editor_absoluteY="674dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
