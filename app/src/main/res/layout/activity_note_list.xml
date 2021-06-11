@@ -23,10 +23,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/imageButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="31dp"
         android:layout_marginEnd="275dp"
@@ -38,20 +38,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="?attr/actionModeCloseDrawable" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/imageButton5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="296dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="272dp"
         android:layout_marginTop="23dp"
         android:layout_marginBottom="34dp"
-        android:background="#0E0707"
-
+        android:src="@drawable/ic_baseline_more_vert_24"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintStart_toEndOf="@+id/imageButton2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.533"
-        app:srcCompat="@android:drawable/ic_menu_sort_alphabetically" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <SearchView
         android:id="@+id/searchView"
@@ -78,31 +76,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/imageButton7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="285dp"
         android:layout_marginBottom="6dp"
-        android:backgroundTint="#CDDC39"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageButton8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView"
         app:layout_constraintVertical_bias="0.583"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+        app:srcCompat="@drawable/ic_edit_note" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/imageButton8"
-        android:layout_width="54dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="284dp"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="#CDDC39"
+        android:layout_width="63dp"
+        android:layout_height="73dp"
+        android:layout_marginStart="280dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageButton7"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@drawable/ic_note_add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

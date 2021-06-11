@@ -11,32 +11,42 @@
         android:id="@+id/textView9"
         android:layout_width="407dp"
         android:layout_height="51dp"
+        android:layout_marginTop="16dp"
         android:background="@color/dark_app_color"
         android:text="Categories"
         android:textAlignment="center"
         android:textSize="24sp"
-        tools:layout_editor_absoluteX="-1dp"
-        tools:layout_editor_absoluteY="50dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="414dp"
-        android:layout_height="529dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:layout_marginTop="6dp"
         android:foregroundTint="#190F0F"
         android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:layout_editor_absoluteX="-2dp"
-        tools:layout_editor_absoluteY="133dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView9"
+        app:spanCount="2"
         tools:listitem="@layout/list_row_category" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/imageButton6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_input_add"
-        tools:layout_editor_absoluteX="351dp"
-        tools:layout_editor_absoluteY="674dp" />
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+       android:src="@drawable/ic_add_folder" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
