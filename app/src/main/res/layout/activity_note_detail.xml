@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFAD2"
+    android:background="@color/light_app_color"
     tools:context=".activities.NoteDetailActivity">
 
     <ImageView
@@ -25,7 +25,7 @@
         android:id="@+id/button3"
         android:layout_width="410dp"
         android:layout_height="54dp"
-        android:background="#FFF59C"
+        android:background="@color/dark_app_color"
         android:clickable="false"
         android:contextClickable="false"
         app:layout_constraintEnd_toEndOf="parent"
@@ -80,7 +80,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="9dp"
         android:layout_marginEnd="30dp"
-        android:background="#FFF176"
+        android:background="@color/dark_app_color"
         android:clickable="false"
         android:contextClickable="false"
         app:layout_constraintEnd_toEndOf="parent"
