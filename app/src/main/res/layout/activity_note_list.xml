@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CDDC39"
+    android:background="@color/white"
     tools:context=".activities.NoteListActivity">
 
     <TextView
@@ -14,7 +14,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="3dp"
         android:layout_marginBottom="28dp"
-        android:background="#FFEB3B"
+        android:background="@color/dark_app_color"
         android:text="Notes"
         android:textAlignment="center"
         android:textSize="24sp"
@@ -31,7 +31,7 @@
         android:layout_marginTop="31dp"
         android:layout_marginEnd="275dp"
         android:layout_marginBottom="15dp"
-        android:backgroundTint="#CDDC39"
+
         app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toStartOf="@+id/imageButton5"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +46,7 @@
         android:layout_marginTop="23dp"
         android:layout_marginBottom="34dp"
         android:background="#0E0707"
-        android:backgroundTint="#CDDC39"
+
         app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintStart_toEndOf="@+id/imageButton2"
         app:layout_constraintTop_toTopOf="parent"
@@ -67,14 +67,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="393dp"
-        android:layout_height="388dp"
-        android:layout_marginStart="9dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="11dp"
-        android:layout_marginEnd="9dp"
         android:layout_marginBottom="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/imageButton8"
         app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/list_row_notes"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
