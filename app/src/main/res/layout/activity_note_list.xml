@@ -4,60 +4,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+
+    android:background="@color/light_app_color"
     tools:context=".activities.NoteListActivity">
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="408dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="3dp"
-        android:layout_marginBottom="28dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
         android:background="@color/dark_app_color"
+        android:gravity="center"
         android:text="Notes"
-        android:textAlignment="center"
+        android:textColor="@color/icons_color"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/searchView"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageButton2"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="31dp"
-        android:layout_marginEnd="275dp"
-        android:layout_marginBottom="15dp"
 
-        app:layout_constraintBottom_toTopOf="@+id/textView6"
+
+        android:src="@drawable/ic_back_arrow"
+        app:layout_constraintBottom_toBottomOf="@+id/textView6"
         app:layout_constraintEnd_toStartOf="@+id/imageButton5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="?attr/actionModeCloseDrawable" />
+        app:layout_constraintTop_toTopOf="@+id/textView6" />
 
     <ImageView
         android:id="@+id/imageButton5"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="272dp"
-        android:layout_marginTop="23dp"
         android:layout_marginBottom="34dp"
         android:src="@drawable/ic_baseline_more_vert_24"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintStart_toEndOf="@+id/imageButton2"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView"
         app:layout_constraintVertical_bias="1.0" />
 
     <SearchView
         android:id="@+id/searchView"
-        android:layout_width="394dp"
-        android:layout_height="57dp"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="21dp"
-        android:layout_marginEnd="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/white_grey_stroke_bg"
+        android:queryHint="Enter here ..."
+
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,38 +66,89 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="11dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+
+        android:padding="10dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/imageButton8"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/list_row_notes"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
-
-    <ImageView
-        android:id="@+id/imageButton7"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="285dp"
-        android:layout_marginBottom="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton8"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView"
-        app:layout_constraintVertical_bias="0.583"
-        app:srcCompat="@drawable/ic_edit_note" />
+        app:layout_constraintTop_toBottomOf="@+id/textView12"
+        app:layout_constraintVertical_bias="0.0"
+        tools:listitem="@layout/list_row_notes" />
 
     <ImageView
         android:id="@+id/imageButton8"
-        android:layout_width="63dp"
-        android:layout_height="73dp"
-        android:layout_marginStart="280dp"
+        android:layout_width="55dp"
+        android:layout_height="65dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButton7"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_note_add" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Sort By"
+
+        android:textColor="@color/icons_color"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/searchView"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="A-Z"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp"
+        android:background="@drawable/a_z_bg"
+        app:layout_constraintBottom_toBottomOf="@+id/textView12"
+        app:layout_constraintStart_toEndOf="@+id/textView12"
+        app:layout_constraintTop_toTopOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:text="Z-A"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp"
+        android:background="@drawable/z_a_bg"
+        app:layout_constraintBottom_toBottomOf="@+id/textView13"
+        app:layout_constraintStart_toEndOf="@+id/textView13"
+        app:layout_constraintTop_toTopOf="@+id/textView13" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:text="Date"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp"
+        android:background="@drawable/date_bg"
+        app:layout_constraintBottom_toBottomOf="@+id/textView14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textView14"
+        app:layout_constraintTop_toTopOf="@+id/textView14" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
