@@ -9,22 +9,19 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="50dp"
-        android:background="#FFFFFF"
+        android:layout_width="164dp"
+        android:layout_height="166dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button3"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <Button
+    <View
         android:id="@+id/button3"
-        android:layout_width="410dp"
-        android:layout_height="54dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
         android:background="@color/dark_app_color"
         android:clickable="false"
         android:contextClickable="false"
@@ -33,16 +30,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
-    <Button
-        android:id="@+id/saveBtn"
-        android:layout_width="68dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="19dp"
-        android:background="#FFFFFF"
-        android:text="@string/save"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView"
@@ -73,10 +60,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <TextView
+    <View
         android:id="@+id/textView4"
         android:layout_width="354dp"
-        android:layout_height="44dp"
+        android:layout_height="58dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="9dp"
         android:layout_marginEnd="30dp"
@@ -124,18 +111,21 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="35dp"
         android:layout_marginEnd="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <Button
+    <ImageView
         android:id="@+id/backBtn"
-        android:layout_width="68dp"
-        android:layout_height="36dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="19dp"
         android:layout_marginTop="9dp"
-        android:background="#FFFFFF"
+
+        android:src="@drawable/ic_back_arrow"
         android:text="@string/back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -156,45 +146,45 @@
         android:id="@+id/recorderBtn"
         android:layout_width="30dp"
         android:layout_height="34dp"
-        android:layout_marginStart="34dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginStart="10dp"
         android:background="#00FFFFFF"
-        android:scaleX="1.3"
-        android:scaleY="1.3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
+
+        app:layout_constraintBottom_toBottomOf="@+id/textView4"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toTopOf="@+id/textView4"
         app:srcCompat="@drawable/record_action_btn"
-        tools:visibility="visible" />
+   />
 
     <SeekBar
         android:id="@+id/scrubberSld"
         android:layout_width="195dp"
         android:layout_height="17dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="23dp"
+        app:layout_constraintBottom_toBottomOf="@+id/recorderBtn"
         app:layout_constraintStart_toEndOf="@+id/recorderBtn"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toTopOf="@+id/recorderBtn" />
 
     <ImageButton
         android:id="@+id/playerBtn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="17dp"
         android:background="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/scrubberSld"
         app:layout_constraintStart_toEndOf="@+id/scrubberSld"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="@+id/scrubberSld"
         app:srcCompat="@drawable/play_btn_f" />
 
     <ImageButton
         android:id="@+id/pauseBtn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="17dp"
         android:background="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/scrubberSld"
+        app:layout_constraintEnd_toEndOf="@+id/textView4"
         app:layout_constraintStart_toEndOf="@+id/playerBtn"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="@+id/scrubberSld"
         app:srcCompat="@drawable/pause_icon_f" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
