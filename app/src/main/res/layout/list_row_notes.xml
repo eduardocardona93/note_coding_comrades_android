@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:padding="16dp"
+    android:layout_height="wrap_content"
     android:layout_margin="3dp"
-    android:background="@color/purple_200"
-    android:layout_height="wrap_content">
+    android:background="#FFFAD2"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/textView8"
@@ -26,9 +26,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="12 June 2021"
-        android:textStyle="bold"
-        android:textSize="14sp"
         android:textColor="@color/icons_color"
+        android:textSize="14sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,10 +36,10 @@
         android:id="@+id/textView11"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Category 1"
-        android:textSize="16dp"
-        android:textColor="@color/dark_grey"
         android:layout_marginTop="10dp"
+        android:text="Category 1"
+        android:textColor="@color/dark_grey"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView8"

@@ -12,7 +12,6 @@
         android:id="@+id/textView6"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="10dp"
         android:background="@color/dark_app_color"
         android:gravity="center"
         android:text="Notes"
@@ -68,6 +67,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
 
+        android:background="#FFFFFF"
         android:padding="10dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/imageButton8"
