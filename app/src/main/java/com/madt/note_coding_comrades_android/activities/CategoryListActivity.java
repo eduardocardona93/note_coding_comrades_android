@@ -2,19 +2,20 @@ package com.madt.note_coding_comrades_android.activities;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -46,6 +47,55 @@ public class CategoryListActivity extends AppCompatActivity {
         rcCategories.setAdapter(new CategoryAdapter(this, categoryList));
 
         createCategory = findViewById(R.id.createCategory);
+        createCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(CategoryListActivity.this);
+                LayoutInflater layoutInflater = LayoutInflater.from(CategoryListActivity.this);
+                View view = layoutInflater.inflate(R.layout.dialog_create_category, null);
+                builder.setView(view);
+
+                final AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+                EditText categoryNameET = view.findViewById(R.id.categoryNameET);
+                Button btnCreate = view.findViewById(R.id.btnCreateCategory);
+
+                btnCreate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String categoryName = categoryNameET.getText().toString().trim();
+                        if(categoryName.isEmpty()){
+                            alertBox("Please enter value for Category name");
+                            return;
+                        }
+                        if(categoryList.contains(categoryName)){
+                            alertBox("Category name already exist!");
+                            return;
+                        }
+                        categoryList.add(categoryName);
+                        alertDialog.dismiss();
+                    }
+                });
+            }
+        });
+    }
+
+    // method that will display the alert dialog
+    public void alertBox(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CategoryListActivity.this);
+        builder.setTitle("Alert");
+        builder.setMessage(message);
+
+        builder.setCancelable(false);
+        builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.create().show();
     }
 
     class CategoryAdapter extends
