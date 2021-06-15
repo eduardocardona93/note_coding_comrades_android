@@ -70,7 +70,7 @@
         android:background="#FFFFFF"
         android:padding="10dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton8"
+        app:layout_constraintBottom_toTopOf="@+id/createNote"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +79,7 @@
         tools:listitem="@layout/list_row_notes" />
 
     <ImageView
-        android:id="@+id/imageButton8"
+        android:id="@+id/createNote"
         android:layout_width="55dp"
         android:layout_height="65dp"
         android:layout_marginEnd="10dp"
