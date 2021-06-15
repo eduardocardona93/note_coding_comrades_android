@@ -174,7 +174,7 @@
 
     <TextView
         android:id="@+id/textView16"
-        android:layout_width="354"
+        android:layout_width="354dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
