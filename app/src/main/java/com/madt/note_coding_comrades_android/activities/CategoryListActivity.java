@@ -2,14 +2,19 @@ package com.madt.note_coding_comrades_android.activities;
 
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -21,6 +26,8 @@ import java.util.ArrayList;
 
 public class CategoryListActivity extends AppCompatActivity {
     RecyclerView rcCategories;
+    ImageView createCategory;
+
     ArrayList<String> categoryList = new ArrayList<>();
 
     @Override
@@ -28,11 +35,17 @@ public class CategoryListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_list);
 
+        categoryList.add("Ranajna");
+        categoryList.add("Eduardo");
+        categoryList.add("Sumit");
+        categoryList.add("Lino");
+        categoryList.add("Dinamol");
+
         rcCategories = findViewById(R.id.rcCategories);
         rcCategories.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
         rcCategories.setAdapter(new CategoryAdapter(this, categoryList));
 
-
+        createCategory = findViewById(R.id.createCategory);
     }
 
     class CategoryAdapter extends
