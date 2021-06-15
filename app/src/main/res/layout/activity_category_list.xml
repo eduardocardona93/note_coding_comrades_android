@@ -32,7 +32,7 @@
         android:padding="10dp"
         android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton6"
+        app:layout_constraintBottom_toTopOf="@+id/createCategory"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9"
@@ -40,7 +40,7 @@
         tools:listitem="@layout/list_row_category" />
 
     <ImageView
-        android:id="@+id/imageButton6"
+        android:id="@+id/createCategory"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginEnd="16dp"
