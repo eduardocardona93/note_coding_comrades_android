@@ -33,7 +33,7 @@ public class NoteUtils {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    public static void showLog(Context context, String message_about, String message) {
+    public static void showLog( String message_about, String message) {
         Log.e("Log", message_about + "::::" + message);
     }
 

@@ -23,8 +23,8 @@ public abstract class NoteRoomDB extends RoomDatabase {
     private static volatile NoteRoomDB INSTANCE;
 
     private static final int NUMBER_OF_THREADS = 4;
-    public static final ExecutorService databaseWriteExecuter = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
-
+    public static final ExecutorService databaseWriteExecutor
+            = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
     public static NoteRoomDB getInstance(final Context context){
         if(INSTANCE == null){
             synchronized (NoteRoomDB.class){
@@ -44,10 +44,10 @@ public abstract class NoteRoomDB extends RoomDatabase {
                 @Override
                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
                     super.onCreate(db);
+                    databaseWriteExecutor.execute(() -> {
+                        NoteDao contactDao = INSTANCE.noteDao();
+                        contactDao.deleteAll();
 
-                    databaseWriteExecuter.execute(()-> {
-                         NoteDao noteDao = INSTANCE.noteDao();
-                         noteDao.deleteAllNotes();
                     });
                 }
             };

@@ -16,8 +16,7 @@ public class Category {
     @ColumnInfo(name = "cat_name")
     private String catName;
 
-    public Category(int catId, @NonNull String catName) {
-        this.catId = catId;
+    public Category( @NonNull String catName) {
         this.catName = catName;
     }
 

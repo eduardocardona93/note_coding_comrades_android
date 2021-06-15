@@ -6,45 +6,60 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.madt.note_coding_comrades_android.R;
+import com.madt.note_coding_comrades_android.model.Category;
+import com.madt.note_coding_comrades_android.model.NoteAppViewModel;
+import com.madt.note_coding_comrades_android.utilities.NoteUtils;
 
 import java.util.ArrayList;
 
 public class CategoryListActivity extends AppCompatActivity {
     RecyclerView rcCategories;
     ImageView createCategory;
-
-    ArrayList<String> categoryList = new ArrayList<>();
+    private NoteAppViewModel noteAppViewModel;
+    ArrayList<Category> categoryList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_list);
 
-        categoryList.add("Ranajna");
-        categoryList.add("Eduardo");
-        categoryList.add("Sumit");
-        categoryList.add("Lino");
-        categoryList.add("Dinamol");
+        noteAppViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication())
+                .create(NoteAppViewModel.class);
 
-        rcCategories = findViewById(R.id.rcCategories);
-        rcCategories.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
-        rcCategories.setAdapter(new CategoryAdapter(this, categoryList));
+/*
+
+        noteAppViewModel.insertCategory(new Category("Music"));
+        noteAppViewModel.insertCategory(new Category("Games"));
+
+*/
+
+        noteAppViewModel.getAllCategories().observe(this, categories -> {
+            categoryList.clear();
+            categoryList.addAll(categories);
+            NoteUtils.showLog("list size",categoryList.size()+"");
+            NoteUtils.showLog("db list size",categories.size()+"");
+            rcCategories = findViewById(R.id.rcCategories);
+            rcCategories.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
+            rcCategories.setAdapter(new CategoryAdapter(this, categoryList));
+        });
+
+
 
         createCategory = findViewById(R.id.createCategory);
         createCategory.setOnClickListener(new View.OnClickListener() {
@@ -65,15 +80,16 @@ public class CategoryListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         String categoryName = categoryNameET.getText().toString().trim();
-                        if(categoryName.isEmpty()){
+                        if (categoryName.isEmpty()) {
                             alertBox("Please enter value for Category name");
                             return;
                         }
-                        if(categoryList.contains(categoryName)){
+                        if (categoryList.contains(categoryName)) {
                             alertBox("Category name already exist!");
                             return;
                         }
-                        categoryList.add(categoryName);
+                       // categoryList.add(new Category(categoryName));
+                        noteAppViewModel.insertCategory(new Category(categoryName));
                         alertDialog.dismiss();
                     }
                 });
@@ -82,7 +98,7 @@ public class CategoryListActivity extends AppCompatActivity {
     }
 
     // method that will display the alert dialog
-    public void alertBox(String message){
+    public void alertBox(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(CategoryListActivity.this);
         builder.setTitle("Alert");
         builder.setMessage(message);
@@ -102,11 +118,12 @@ public class CategoryListActivity extends AppCompatActivity {
             RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
         private Activity activity;
-        private ArrayList<String> categoryList;
+        private ArrayList<Category> categoryList;
 
-        CategoryAdapter(Activity activity, ArrayList<String> categoryList) {
+        CategoryAdapter(Activity activity, ArrayList<Category> categoryList) {
             this.activity = activity;
             this.categoryList = categoryList;
+            NoteUtils.showLog("adpter list size",categoryList.size()+"");
         }
 
         @NonNull
@@ -120,7 +137,7 @@ public class CategoryListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
 
-            holder.categoryNameTV.setText(categoryList.get(position));
+            holder.categoryNameTV.setText(categoryList.get(position).getCatName());
             holder.categoryNameTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

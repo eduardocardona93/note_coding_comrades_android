@@ -14,9 +14,13 @@ public class Note {
     @ColumnInfo(name = "note_id")
     private int noteId;
 
+    public int getNoteCategoryId() {
+        return noteCategoryId;
+    }
+
     @NonNull
-    @ColumnInfo(name = "cat_id")
-    private int catId;
+    @ColumnInfo(name = "note_category_id")
+    private int noteCategoryId;
 
     @NonNull
     @ColumnInfo(name = "note_name")
@@ -26,19 +30,30 @@ public class Note {
     @ColumnInfo(name = "note_detail")
     private String noteDetail;
 
+/*
+
     @ColumnInfo(name = "note_image")
     private Blob noteImage;
 
     @ColumnInfo(name = "note_recording")
     private Blob noteRecording;
+*/
 
-    public Note(int noteId, int catId, @NonNull String noteName, @NonNull String noteDetail, Blob noteImage, Blob noteRecording) {
+   /* public Note(int noteId, int noteCategoryId, @NonNull String noteName, @NonNull String noteDetail, Blob noteImage, Blob noteRecording) {
         this.noteId = noteId;
-        this.catId = catId;
+        this.noteCategoryId = noteCategoryId;
         this.noteName = noteName;
         this.noteDetail = noteDetail;
-        this.noteImage = noteImage;
-        this.noteRecording = noteRecording;
+       *//* this.noteImage = noteImage;
+        this.noteRecording = noteRecording;*//*
+    }*/
+  public Note(int noteId, int noteCategoryId, @NonNull String noteName, @NonNull String noteDetail) {
+        this.noteId = noteId;
+        this.noteCategoryId = noteCategoryId;
+        this.noteName = noteName;
+        this.noteDetail = noteDetail;
+       /* this.noteImage = noteImage;
+        this.noteRecording = noteRecording;*/
     }
 
     public int getNoteId() {
@@ -50,11 +65,11 @@ public class Note {
     }
 
     public int getCatId() {
-        return catId;
+        return noteCategoryId;
     }
 
     public void setCatId(int catId) {
-        this.catId = catId;
+        this.noteCategoryId = catId;
     }
 
     @NonNull
@@ -75,7 +90,7 @@ public class Note {
         this.noteDetail = noteDetail;
     }
 
-    public Blob getNoteImage() {
+   /* public Blob getNoteImage() {
         return noteImage;
     }
 
@@ -89,5 +104,5 @@ public class Note {
 
     public void setNoteRecording(Blob noteRecording) {
         this.noteRecording = noteRecording;
-    }
+    }*/
 }
