@@ -14,16 +14,20 @@ import java.util.List;
 public class NoteAppViewModel extends AndroidViewModel {
     private NoteAppRepository repository;
     private final LiveData<List<Category>> allCategories;
+    private final LiveData<List<Note>> allNotes;
 
     public NoteAppViewModel(@NonNull Application application) {
         super(application);
 
         repository = new NoteAppRepository(application);
         allCategories = repository.getAllCategories();
+        allNotes = repository.getAllNotes();
     }
 
     public LiveData<List<Category>> getAllCategories() {return allCategories;}
-    public void insertCategory(Category category) {repository.insertCategory(category);}
+    public LiveData<List<Note>> getAllNotes() {return allNotes;}
+    public void insertCategory(Category category){repository.insertCategory(category);}
+    public void inertNote(Note contact) {repository.insertNote(contact);}
 
 
 }

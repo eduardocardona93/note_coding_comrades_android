@@ -24,6 +24,9 @@ public interface NoteDao {
     @Query("SELECT * FROM category")
     LiveData<List<Category>> getAllCategories();
 
+    @Query("SELECT * FROM note")
+    LiveData<List<Note>> getAllNotes();
+
     @Transaction
     @Query("SELECT * FROM category")
     public List<CategoryHavingNotes> getNotesForCategory();

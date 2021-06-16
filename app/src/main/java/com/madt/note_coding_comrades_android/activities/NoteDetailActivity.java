@@ -3,6 +3,7 @@ package com.madt.note_coding_comrades_android.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -10,6 +11,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -21,6 +23,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -35,6 +38,8 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.madt.note_coding_comrades_android.R;
+import com.madt.note_coding_comrades_android.model.Note;
+import com.madt.note_coding_comrades_android.model.NoteAppViewModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,9 +71,12 @@ public class NoteDetailActivity extends AppCompatActivity {
     private List<String> permissions = new ArrayList<>();
     private List<String> permissionsRejected = new ArrayList<>();
 
-
+    private NoteAppViewModel noteAppViewModel;
+    ArrayList<Note> noteList = new ArrayList<>();
 
     ImageButton btnPlay, btnRecord, btnPause;
+    TextView saveTV;
+    EditText titleET, detailET;
     String pathSave = "";
     MediaRecorder mediaRecorder;
     SeekBar scrubberSld;
@@ -205,7 +213,7 @@ public class NoteDetailActivity extends AppCompatActivity {
         }, 0, 300);
 
         // LOCATION INIT
-        geocoder = new Geocoder(this, Locale.getDefault());
+        /*geocoder = new Geocoder(this, Locale.getDefault());
         longitudeTV = findViewById(R.id.longitudeTV);
         latitudeTV = findViewById(R.id.latitudeTV);
         locationDetailsTV = findViewById(R.id.locationDetailsTV);
@@ -219,7 +227,31 @@ public class NoteDetailActivity extends AppCompatActivity {
         permissionsToRequest = permissionsToRequest(permissions);
         if (permissionsToRequest.size() > 0) {
             requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), REQUEST_CODE);
-        }
+        }*/
+
+        noteAppViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication())
+                .create(NoteAppViewModel.class);
+
+        saveTV = findViewById(R.id.saveTV);
+        titleET = findViewById(R.id.titleET);
+        detailET = findViewById(R.id.detailET);
+
+        saveTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String title = titleET.getText().toString().trim();
+                String detail = detailET.getText().toString().trim();
+
+                if(title.isEmpty()){
+                    alertBox("Title can not be empty!");
+                } else if(detail.isEmpty()){
+                    alertBox("Description can not be empty!");
+                }
+                noteAppViewModel.inertNote(new Note(title, detail));
+
+                startActivity(new Intent(getBaseContext(), NoteListActivity.class));
+            }
+        });
     }
 
     @Override
@@ -362,4 +394,22 @@ public class NoteDetailActivity extends AppCompatActivity {
             }
         }
     }
+
+    // method that will display the alert dialog
+    public void alertBox(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(NoteDetailActivity.this);
+        builder.setTitle("Alert");
+        builder.setMessage(message);
+
+        builder.setCancelable(false);
+        builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.create().show();
+    }
+
 }

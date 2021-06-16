@@ -47,9 +47,16 @@ public class Note {
        *//* this.noteImage = noteImage;
         this.noteRecording = noteRecording;*//*
     }*/
-  public Note(int noteId, int noteCategoryId, @NonNull String noteName, @NonNull String noteDetail) {
+  /*public Note(int noteId, int noteCategoryId, @NonNull String noteName, @NonNull String noteDetail) {
         this.noteId = noteId;
         this.noteCategoryId = noteCategoryId;
+        this.noteName = noteName;
+        this.noteDetail = noteDetail;
+       *//* this.noteImage = noteImage;
+        this.noteRecording = noteRecording;*//*
+    }*/
+
+    public Note(@NonNull String noteName, @NonNull String noteDetail) {
         this.noteName = noteName;
         this.noteDetail = noteDetail;
        /* this.noteImage = noteImage;
@@ -64,12 +71,8 @@ public class Note {
         this.noteId = noteId;
     }
 
-    public int getCatId() {
-        return noteCategoryId;
-    }
-
-    public void setCatId(int catId) {
-        this.noteCategoryId = catId;
+    public void setNoteCategoryId(int noteCategoryId) {
+        this.noteCategoryId = noteCategoryId;
     }
 
     @NonNull

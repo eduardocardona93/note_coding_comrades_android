@@ -14,17 +14,22 @@ import java.util.List;
 public class NoteAppRepository {
     private NoteDao noteDao;
     private LiveData<List<Category>> allCategories;
+    private LiveData<List<Note>> allNotes;
 
     public NoteAppRepository(Application application) {
         NoteRoomDB db = NoteRoomDB.getInstance(application);
         noteDao = db.noteDao();
         allCategories = noteDao.getAllCategories();
+        allNotes = noteDao.getAllNotes();
     }
 
     public LiveData<List<Category>> getAllCategories() {
         return allCategories;
     }
 
+    public LiveData<List<Note>> getAllNotes() {
+        return allNotes;
+    }
 
 
     public void insertCategory(Category category) {
