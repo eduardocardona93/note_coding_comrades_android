@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.madt.note_coding_comrades_android.R;
@@ -49,6 +50,12 @@ public class NoteListActivity extends AppCompatActivity {
 
         createNote = findViewById(R.id.createNote);
         searchView = findViewById(R.id.searchView);
+        rcNotes = findViewById(R.id.rcNotes);
+
+        // Setup Recycler View Layout Manager
+        rcNotes.setHasFixedSize(true);
+        rcNotes.setLayoutManager(new LinearLayoutManager(this));
+
         createNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +80,6 @@ public class NoteListActivity extends AppCompatActivity {
             NoteUtils.showLog("list size", noteList.size() + "");
             NoteUtils.showLog("db list size", noteList.size() + "");
 
-            rcNotes = findViewById(R.id.rcNotes);
             noteAdapter = new NoteAdapter(this, noteList);
             rcNotes.setAdapter(noteAdapter);
         });
