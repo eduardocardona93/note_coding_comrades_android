@@ -28,6 +28,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
@@ -36,6 +38,8 @@ public class NoteListActivity extends AppCompatActivity {
 
     ImageView createNote;
     RecyclerView rcNotes;
+    TextView sortAZ, sortZA, sortDate;
+
     private NoteAppViewModel noteAppViewModel;
     ArrayList<Note> noteList = new ArrayList<>();
     ArrayList<Note> filteredList = new ArrayList<>();
@@ -66,6 +70,34 @@ public class NoteListActivity extends AppCompatActivity {
 
         findViewById(R.id.imgBack).setOnClickListener(v -> {
           finish();
+        });
+
+        sortAZ = findViewById(R.id.sortAZ);
+        sortZA = findViewById(R.id.sortZA);
+        sortDate = findViewById(R.id.sortDate);
+
+        sortAZ.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Comparator<Note> compareByName = (Note n1, Note n2) ->
+                        n1.getNoteName().compareTo( n2.getNoteName() );
+
+                Collections.sort(noteList, compareByName);
+                noteAdapter = new NoteAdapter(NoteListActivity.this, noteList);
+                rcNotes.setAdapter(noteAdapter);
+            }
+        });
+
+        sortZA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Comparator<Note> compareByName = (Note n1, Note n2) ->
+                        n1.getNoteName().compareTo( n2.getNoteName() );
+
+                Collections.sort(noteList, compareByName.reversed());
+                noteAdapter = new NoteAdapter(NoteListActivity.this, noteList);
+                rcNotes.setAdapter(noteAdapter);
+            }
         });
 
         noteAppViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication())
