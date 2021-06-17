@@ -52,6 +52,13 @@ public class NoteListActivity extends AppCompatActivity {
         noteAppViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication())
                 .create(NoteAppViewModel.class);
 
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         noteAppViewModel.getAllNotes().observe(this, notes -> {
             noteList.clear();
             noteList.addAll(notes);
@@ -62,7 +69,6 @@ public class NoteListActivity extends AppCompatActivity {
             rcNotes = findViewById(R.id.rcNotes);
             rcNotes.setAdapter(new NoteAdapter(this, noteList));
         });
-
     }
 
     class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{

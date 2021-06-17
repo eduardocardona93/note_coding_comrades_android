@@ -1,17 +1,11 @@
 package com.madt.note_coding_comrades_android.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -25,9 +19,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -35,7 +35,6 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.madt.note_coding_comrades_android.R;
 import com.madt.note_coding_comrades_android.model.Note;
@@ -44,11 +43,8 @@ import com.madt.note_coding_comrades_android.model.NoteAppViewModel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
-
-
 
 
 public class NoteDetailActivity extends AppCompatActivity {
@@ -75,6 +71,7 @@ public class NoteDetailActivity extends AppCompatActivity {
     ArrayList<Note> noteList = new ArrayList<>();
 
     ImageButton btnPlay, btnRecord, btnPause;
+     ImageView btnBack;
     TextView saveTV;
     EditText titleET, detailET;
     String pathSave = "";
@@ -84,7 +81,8 @@ public class NoteDetailActivity extends AppCompatActivity {
     AudioManager audioManager;
     Boolean isRecording = false, isPlaying = false;
     final private static String RECORDED_FILE = "/audio.3gp";
-    @SuppressLint("WrongViewCast")
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,62 +94,62 @@ public class NoteDetailActivity extends AppCompatActivity {
         btnPlay.setVisibility(View.GONE);
         btnRecord = findViewById(R.id.recorderBtn);
         scrubberSld = findViewById(R.id.scrubberSld);
+        btnBack = findViewById(R.id.backBtn);
         scrubberSld.setVisibility(View.GONE);
 
         audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
         // set the volume of played media to maximum.
-        audioManager.setStreamVolume (AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),0);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
         permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         permissions.add(Manifest.permission.RECORD_AUDIO);
 
 
-        btnRecord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!isRecording){
-                    if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) && hasPermission(Manifest.permission.RECORD_AUDIO)) {
-                        pathSave = getExternalCacheDir().getAbsolutePath()
-                                + RECORDED_FILE;
+        btnRecord.setOnClickListener(v -> {
+            if (!isRecording) {
+                if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) && hasPermission(Manifest.permission.RECORD_AUDIO)) {
+                    pathSave = getExternalCacheDir().getAbsolutePath()
+                            + RECORDED_FILE;
 
-                        setUpMediaRecorder();
+                    setUpMediaRecorder();
 
-                        try {
-                            mediaRecorder.prepare();
-                            mediaRecorder.start();
+                    try {
+                        mediaRecorder.prepare();
+                        mediaRecorder.start();
 
 
-                            btnPlay.setEnabled(false);
-                            btnPlay.setVisibility(View.GONE);
-                            scrubberSld.setVisibility(View.GONE);
-                            Toast.makeText(NoteDetailActivity.this, "Recording...", Toast.LENGTH_SHORT).show();
-                        } catch (IllegalStateException ise) {
-                            // make something ...
-                            ise.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        btnPlay.setEnabled(false);
+                        btnPlay.setVisibility(View.GONE);
+                        scrubberSld.setVisibility(View.GONE);
+                        Toast.makeText(NoteDetailActivity.this, "Recording...", Toast.LENGTH_SHORT).show();
+                    } catch (IllegalStateException ise) {
+                        // make something ...
+                        ise.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                    } else
-                        Log.i(TAG, "Set permissions: ");
-                    //TODO
-                }else{
+                } else
+                    Log.i(TAG, "Set permissions: ");
+                //TODO
+            } else {
 
-                    mediaRecorder.stop();
-                    btnPlay.setEnabled(true);
-                    btnPlay.setVisibility(View.VISIBLE);
-                    scrubberSld.setVisibility(View.VISIBLE);
+                mediaRecorder.stop();
+                btnPlay.setEnabled(true);
+                btnPlay.setVisibility(View.VISIBLE);
+                scrubberSld.setVisibility(View.VISIBLE);
 
 
-                }
-                isRecording = !isRecording;
             }
+            isRecording = !isRecording;
         });
 
-
+        btnBack.setOnClickListener(v -> {
+                finish();
+        });
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isPlaying){
+                if (!isPlaying) {
                     btnRecord.setEnabled(false);
                     //btnPlay.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_media_pause, 0, 0, 0);
 
@@ -177,7 +175,7 @@ public class NoteDetailActivity extends AppCompatActivity {
 
                     mediaPlayer.start();
                     Toast.makeText(NoteDetailActivity.this, "Playing...", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     btnRecord.setEnabled(true);
                     //btnPlay.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_media_play, 0, 0, 0);
                     mediaPlayer.pause();
@@ -206,7 +204,7 @@ public class NoteDetailActivity extends AppCompatActivity {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if(isPlaying && mediaPlayer != null){
+                if (isPlaying && mediaPlayer != null) {
                     scrubberSld.setProgress(mediaPlayer.getCurrentPosition());
                 }
             }
@@ -242,14 +240,15 @@ public class NoteDetailActivity extends AppCompatActivity {
                 String title = titleET.getText().toString().trim();
                 String detail = detailET.getText().toString().trim();
 
-                if(title.isEmpty()){
+                if (title.isEmpty()) {
                     alertBox("Title can not be empty!");
-                } else if(detail.isEmpty()){
+                } else if (detail.isEmpty()) {
                     alertBox("Description can not be empty!");
-                }
-                noteAppViewModel.inertNote(new Note(title, detail));
+                } else {
+                    noteAppViewModel.inertNote(new Note(title, detail));
 
-                startActivity(new Intent(getBaseContext(), NoteListActivity.class));
+                    finish();
+                }
             }
         });
     }
@@ -334,7 +333,7 @@ public class NoteDetailActivity extends AppCompatActivity {
                         String postalCode = addresses.get(0).getPostalCode();
                         String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
                         locationDetailsTV.setText(String.format("Accuracy: %s,Altitude: %s \n %s, %s, %s, %s, %s ,%s",
-                                location.getAccuracy(), location.getAltitude() , address, city, state, country, postalCode, knownName
+                                location.getAccuracy(), location.getAltitude(), address, city, state, country, postalCode, knownName
                         ));
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -345,11 +344,12 @@ public class NoteDetailActivity extends AppCompatActivity {
             }
         };
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
     }
+
     //permissions
     private List<String> permissionsToRequest(List<String> permissions) {
         ArrayList<String> results = new ArrayList<>();
