@@ -11,7 +11,7 @@ public class CategoryHavingNotes {
     public Category category;
     @Relation(
             parentColumn = "cat_id",
-            entityColumn = "note_category_id"
+            entityColumn = "noteCategoryId"
     )
     public List<Note> notes;
 }

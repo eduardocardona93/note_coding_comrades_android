@@ -10,7 +10,7 @@ public class Category {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "cat_id")
-    private int catId;
+     int catId;
 
     @NonNull
     @ColumnInfo(name = "cat_name")

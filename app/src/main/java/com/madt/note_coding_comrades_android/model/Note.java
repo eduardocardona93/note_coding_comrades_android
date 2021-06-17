@@ -3,23 +3,24 @@ package com.madt.note_coding_comrades_android.model;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import java.sql.Blob;
+import static androidx.room.ForeignKey.CASCADE;
 
-@Entity(tableName = "note")
+
+@Entity(tableName = "note", foreignKeys = @ForeignKey(entity = Category.class,
+        parentColumns = "cat_id",
+        childColumns = "noteCategoryId",
+        onDelete = CASCADE))
 public class Note {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "note_id")
     private int noteId;
 
-    public int getNoteCategoryId() {
-        return noteCategoryId;
-    }
 
-    @NonNull
-    @ColumnInfo(name = "note_category_id")
+
     private int noteCategoryId;
 
     @NonNull
@@ -56,11 +57,16 @@ public class Note {
         this.noteRecording = noteRecording;*//*
     }*/
 
-    public Note(@NonNull String noteName, @NonNull String noteDetail) {
+    public Note(@NonNull String noteName, @NonNull String noteDetail, int noteCategoryId) {
         this.noteName = noteName;
         this.noteDetail = noteDetail;
+        this.noteCategoryId=noteCategoryId;
        /* this.noteImage = noteImage;
         this.noteRecording = noteRecording;*/
+    }
+
+    public int getNoteCategoryId() {
+        return noteCategoryId;
     }
 
     public int getNoteId() {

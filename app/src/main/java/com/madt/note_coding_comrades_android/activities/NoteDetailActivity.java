@@ -67,9 +67,9 @@ public class NoteDetailActivity extends AppCompatActivity {
 
     private NoteAppViewModel noteAppViewModel;
     ArrayList<Note> noteList = new ArrayList<>();
-
+    private int catID = 0;
     ImageButton btnPlay, btnRecord, btnPause;
-     ImageView btnBack;
+    ImageView btnBack;
     TextView saveTV;
     EditText titleET, detailET;
     String pathSave = "";
@@ -101,7 +101,7 @@ public class NoteDetailActivity extends AppCompatActivity {
         permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         permissions.add(Manifest.permission.RECORD_AUDIO);
 
-
+        catID = getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0);
         btnRecord.setOnClickListener(v -> {
             if (!isRecording) {
                 if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) && hasPermission(Manifest.permission.RECORD_AUDIO)) {
@@ -142,7 +142,7 @@ public class NoteDetailActivity extends AppCompatActivity {
         });
 
         btnBack.setOnClickListener(v -> {
-                finish();
+            finish();
         });
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,7 +243,7 @@ public class NoteDetailActivity extends AppCompatActivity {
                 } else if (detail.isEmpty()) {
                     alertBox("Description can not be empty!");
                 } else {
-                    noteAppViewModel.insertNote(new Note(title, detail));
+                    noteAppViewModel.insertNote(new Note(title, detail,catID));
 
                     finish();
                 }

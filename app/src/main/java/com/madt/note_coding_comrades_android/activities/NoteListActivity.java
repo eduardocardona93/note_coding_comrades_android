@@ -38,7 +38,7 @@ public class NoteListActivity extends AppCompatActivity {
     RecyclerView rcNotes;
     private NoteAppViewModel noteAppViewModel;
     ArrayList<Note> noteList = new ArrayList<>();
-    public static final String NOTE_ID = "note_id";
+    public static final String CATEGORY_ID = "cate_id";
     SearchView searchView;
     private NoteAdapter noteAdapter;
 
@@ -56,12 +56,15 @@ public class NoteListActivity extends AppCompatActivity {
         rcNotes.setHasFixedSize(true);
         rcNotes.setLayoutManager(new LinearLayoutManager(this));
 
-        createNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), NoteDetailActivity.class);
-                startActivity(intent);
-            }
+        createNote.setOnClickListener(v -> {
+
+            Intent intent = new Intent(getBaseContext(), NoteDetailActivity.class);
+            intent.putExtra(NoteListActivity.CATEGORY_ID,getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0));
+            startActivity(intent);
+        });
+
+        findViewById(R.id.imgBack).setOnClickListener(v -> {
+          finish();
         });
 
         noteAppViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication())
@@ -73,7 +76,17 @@ public class NoteListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        noteAppViewModel.getAllNotes().observe(this, notes -> {
+      /*  noteAppViewModel.getAllNotes().observe(this, notes -> {
+            noteList.clear();
+            noteList.addAll(notes);
+
+            NoteUtils.showLog("list size", noteList.size() + "");
+            NoteUtils.showLog("db list size", noteList.size() + "");
+
+            noteAdapter = new NoteAdapter(this, noteList);
+            rcNotes.setAdapter(noteAdapter);
+        });*/
+        noteAppViewModel.getNotesByCategory(getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0)).observe(this, notes -> {
             noteList.clear();
             noteList.addAll(notes);
 

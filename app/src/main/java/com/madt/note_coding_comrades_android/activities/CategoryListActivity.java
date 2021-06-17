@@ -141,9 +141,9 @@ public class CategoryListActivity extends AppCompatActivity {
             holder.categoryNameTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Intent intentEdit = new Intent(getBaseContext(), NoteListActivity.class);
-                    startActivity(intentEdit);
+                    Intent intent = new Intent(getBaseContext(), NoteListActivity.class);
+                    intent.putExtra(NoteListActivity.CATEGORY_ID, categoryList.get(position).getCatId());
+                    startActivity(intent);
                 }
             });
 

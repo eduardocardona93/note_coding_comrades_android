@@ -28,9 +28,12 @@ public interface NoteDao {
     @Query("SELECT * FROM note")
     LiveData<List<Note>> getAllNotes();
 
-    @Transaction
+ /*   @Transaction
     @Query("SELECT * FROM category")
-    public List<CategoryHavingNotes> getNotesForCategory();
+    public   LiveData<List<CategoryHavingNotes>> getNotesForCategory();
+*/
+    @Query("SELECT * FROM note WHERE noteCategoryId = :cateId")
+    LiveData<List<Note>> getNotesForCategory(int cateId);
 
     @Query("DELETE FROM note")
     void deleteAll();

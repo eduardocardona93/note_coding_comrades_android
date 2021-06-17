@@ -4,7 +4,6 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-
 import com.madt.note_coding_comrades_android.model.Category;
 import com.madt.note_coding_comrades_android.model.Note;
 import com.madt.note_coding_comrades_android.utilities.NoteRoomDB;
@@ -39,8 +38,13 @@ public class NoteAppRepository {
     public void insertNote(Note note) {
         NoteRoomDB.databaseWriteExecutor.execute(() -> noteDao.insertNote(note));
     }
+
     public void delete(Note note) {
         NoteRoomDB.databaseWriteExecutor.execute(() -> noteDao.deleteNote(note));
+    }
+
+    public LiveData<List<Note>> getNotesByCategory(int catId) {
+       return noteDao.getNotesForCategory(catId);
     }
 
 }

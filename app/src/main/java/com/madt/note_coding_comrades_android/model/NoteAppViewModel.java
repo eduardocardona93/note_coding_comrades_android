@@ -26,6 +26,7 @@ public class NoteAppViewModel extends AndroidViewModel {
 
     public LiveData<List<Category>> getAllCategories() {return allCategories;}
     public LiveData<List<Note>> getAllNotes() {return allNotes;}
+    public LiveData<List<Note>> getNotesByCategory(int catId) {return repository.getNotesByCategory(catId);}
     public void insertCategory(Category category){repository.insertCategory(category);}
     public void insertNote(Note note) {repository.insertNote(note);}
     public void delete(Note note) {repository.delete(note);}
