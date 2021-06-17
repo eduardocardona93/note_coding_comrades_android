@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -22,6 +23,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -48,6 +53,7 @@ import java.util.TimerTask;
 public class NoteDetailActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final int REQUEST_CODE = 1;
+    public static final int READ_EXTERNAL_STORAGE_CODE = 2;
 
     // Location Demo with FUSED LOCATION PROVIDER CLIENT
 
@@ -69,7 +75,7 @@ public class NoteDetailActivity extends AppCompatActivity {
     ArrayList<Note> noteList = new ArrayList<>();
     private int catID = 0;
     ImageButton btnPlay, btnRecord, btnPause;
-    ImageView btnBack;
+    ImageView btnBack, uploadImage, imageView;
     TextView saveTV;
     EditText titleET, detailET;
     String pathSave = "";
@@ -79,6 +85,8 @@ public class NoteDetailActivity extends AppCompatActivity {
     AudioManager audioManager;
     Boolean isRecording = false, isPlaying = false;
     final private static String RECORDED_FILE = "/audio.3gp";
+
+    ActivityResultLauncher<Intent> someActivityResultLauncher;
 
 
     @Override
@@ -93,6 +101,8 @@ public class NoteDetailActivity extends AppCompatActivity {
         btnRecord = findViewById(R.id.recorderBtn);
         scrubberSld = findViewById(R.id.scrubberSld);
         btnBack = findViewById(R.id.backBtn);
+        uploadImage = findViewById(R.id.uploadImage);
+        imageView = findViewById(R.id.uploadImage);
         scrubberSld.setVisibility(View.GONE);
 
         audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
@@ -225,6 +235,18 @@ public class NoteDetailActivity extends AppCompatActivity {
             requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), REQUEST_CODE);
         }*/
 
+        uploadImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE_CODE);
+                } else {
+                    pickImageFromGalary();
+                }
+            }
+        });
+
+
         noteAppViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication())
                 .create(NoteAppViewModel.class);
 
@@ -249,6 +271,20 @@ public class NoteDetailActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // You can do the assignment inside onAttach or onCreate, i.e, before the activity is displayed
+         someActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK) {
+                            // There are no request codes
+                            Intent data = result.getData();
+                            uploadImage.setImageURI(data.getData());
+                        }
+                    }
+                });
     }
 
     @Override
@@ -390,6 +426,10 @@ public class NoteDetailActivity extends AppCompatActivity {
                     }
                 }
             }
+        } else if(requestCode == READ_EXTERNAL_STORAGE_CODE) {
+            if(grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                pickImageFromGalary();
+            }
         }
     }
 
@@ -410,4 +450,10 @@ public class NoteDetailActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+    private void pickImageFromGalary() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        someActivityResultLauncher.launch(intent);
+    }
 }

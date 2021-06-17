@@ -8,7 +8,7 @@
     tools:context=".activities.NoteDetailActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/uploadImage"
         android:layout_width="140dp"
         android:layout_height="140dp"
         android:layout_marginTop="16dp"
@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button3"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:src="@drawable/ic_blank_image"/>
 
     <View
         android:id="@+id/button3"
@@ -44,7 +44,7 @@
         android:textStyle="bold"
         android:typeface="normal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/uploadImage" />
 
     <EditText
         android:id="@+id/titleET"
