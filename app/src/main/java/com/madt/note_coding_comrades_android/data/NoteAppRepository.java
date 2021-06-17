@@ -36,10 +36,12 @@ public class NoteAppRepository {
         NoteRoomDB.databaseWriteExecutor.execute(() -> noteDao.insertCategory(category));
     }
 
-    public void insertNote(Note contact) {
-        NoteRoomDB.databaseWriteExecutor.execute(() -> noteDao.insertNote(contact));
+    public void insertNote(Note note) {
+        NoteRoomDB.databaseWriteExecutor.execute(() -> noteDao.insertNote(note));
     }
-
+    public void delete(Note note) {
+        NoteRoomDB.databaseWriteExecutor.execute(() -> noteDao.deleteNote(note));
+    }
 
 }
 

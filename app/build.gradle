@@ -59,4 +59,7 @@ dependencies {
     // Annotation processor
 //    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+
+    // swipe row
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
 }

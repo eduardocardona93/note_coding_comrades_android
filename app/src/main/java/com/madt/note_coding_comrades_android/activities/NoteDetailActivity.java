@@ -1,7 +1,6 @@
 package com.madt.note_coding_comrades_android.activities;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -16,7 +15,6 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -245,7 +243,7 @@ public class NoteDetailActivity extends AppCompatActivity {
                 } else if (detail.isEmpty()) {
                     alertBox("Description can not be empty!");
                 } else {
-                    noteAppViewModel.inertNote(new Note(title, detail));
+                    noteAppViewModel.insertNote(new Note(title, detail));
 
                     finish();
                 }
