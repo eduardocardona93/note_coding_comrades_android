@@ -247,13 +247,15 @@ public class NoteListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull NoteListActivity.NoteAdapter.ViewHolder holder, int position) {
             Date date = Calendar.getInstance().getTime();
-            DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy ");
+            DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
             String strDate = dateFormat.format(date);
             System.out.println("Converted String: " + strDate);
 
             holder.noteTitle.setText(noteList.get(position).getNoteName());
             holder.categoryName.setText("Catepgry");
             holder.noteCreationDate.setText(strDate);
+
+            holder.bind(noteList.get(position));
         }
 
         @Override
@@ -274,6 +276,21 @@ public class NoteListActivity extends AppCompatActivity {
                 categoryName = itemView.findViewById(R.id.categoryName);
                 noteCreationDate = itemView.findViewById(R.id.noteCreationDate);
             }
+
+            public void bind(Note note) {
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        Intent intent = new Intent(NoteListActivity.this, AddEditNoteActivity.class);
+                        intent.putExtra("note_id", note.getNoteId());
+                        intent.putExtra("noteCategoryId", note.getNoteCategoryId());
+                        intent.putExtra("note_name", note.getNoteName());
+                        intent.putExtra("note_detail", note.getNoteDetail());
+                        intent.putExtra("note_image", note.getNoteImage());
+                        startActivity(intent);
+                    }
+                });
+            }
+
         }
     }
 

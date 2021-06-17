@@ -249,9 +249,6 @@ public class NoteDetailActivity extends AppCompatActivity {
             }
         });
 
-
-
-
         noteAppViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication())
                 .create(NoteAppViewModel.class);
 
@@ -295,6 +292,8 @@ public class NoteDetailActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+
     }
 
     @Override
