@@ -143,8 +143,13 @@ public class NoteListActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             NoteUtils.showLog("in", "swipe");
+            NoteUtils.showLog("in", "swipe : " + getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0));
             int position = viewHolder.getAdapterPosition();
-            Note contact = noteAppViewModel.getAllNotes().getValue().get(position);
+            /*final Note[] contact = new Note[1];
+            noteAppViewModel.getNotesByCategory(getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0)).observe(this, notes -> {
+                contact[0] = notes.get(position);
+            });*/
+            Note contact = noteList.get(position);
             switch (direction) {
                 case ItemTouchHelper.LEFT:
                     // confirmation dialog to ask user before delete contact
