@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -43,6 +45,7 @@ import com.madt.note_coding_comrades_android.R;
 import com.madt.note_coding_comrades_android.model.Note;
 import com.madt.note_coding_comrades_android.model.NoteAppViewModel;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -247,6 +250,8 @@ public class NoteDetailActivity extends AppCompatActivity {
         });
 
 
+
+
         noteAppViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication())
                 .create(NoteAppViewModel.class);
 
@@ -260,12 +265,17 @@ public class NoteDetailActivity extends AppCompatActivity {
                 String title = titleET.getText().toString().trim();
                 String detail = detailET.getText().toString().trim();
 
+                Bitmap bitmap = ((BitmapDrawable) uploadImage.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos);
+                byte[] imageInByte = baos.toByteArray();
+
                 if (title.isEmpty()) {
                     alertBox("Title can not be empty!");
                 } else if (detail.isEmpty()) {
                     alertBox("Description can not be empty!");
                 } else {
-                    noteAppViewModel.insertNote(new Note(title, detail,catID));
+                    noteAppViewModel.insertNote(new Note(title, detail, catID, imageInByte));
 
                     finish();
                 }

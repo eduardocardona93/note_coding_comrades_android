@@ -31,11 +31,9 @@ public class Note {
     @ColumnInfo(name = "note_detail")
     private String noteDetail;
 
+    @ColumnInfo(name = "note_image", typeAffinity = ColumnInfo.BLOB)
+    private byte[] noteImage;
 /*
-
-    @ColumnInfo(name = "note_image")
-    private Blob noteImage;
-
     @ColumnInfo(name = "note_recording")
     private Blob noteRecording;
 */
@@ -57,12 +55,12 @@ public class Note {
         this.noteRecording = noteRecording;*//*
     }*/
 
-    public Note(@NonNull String noteName, @NonNull String noteDetail, int noteCategoryId) {
+    public Note(@NonNull String noteName, @NonNull String noteDetail, int noteCategoryId, byte[] noteImage) {
         this.noteName = noteName;
         this.noteDetail = noteDetail;
         this.noteCategoryId=noteCategoryId;
-       /* this.noteImage = noteImage;
-        this.noteRecording = noteRecording;*/
+        this.noteImage = noteImage;
+        /*this.noteRecording = noteRecording;*/
     }
 
     public int getNoteCategoryId() {
@@ -99,15 +97,15 @@ public class Note {
         this.noteDetail = noteDetail;
     }
 
-   /* public Blob getNoteImage() {
+    public byte[] getNoteImage() {
         return noteImage;
     }
 
-    public void setNoteImage(Blob noteImage) {
+    public void setNoteImage(byte[] noteImage) {
         this.noteImage = noteImage;
     }
 
-    public Blob getNoteRecording() {
+   /* public Blob getNoteRecording() {
         return noteRecording;
     }
 
