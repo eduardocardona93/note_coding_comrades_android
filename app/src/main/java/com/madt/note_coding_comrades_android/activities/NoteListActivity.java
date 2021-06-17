@@ -38,6 +38,7 @@ public class NoteListActivity extends AppCompatActivity {
     RecyclerView rcNotes;
     private NoteAppViewModel noteAppViewModel;
     ArrayList<Note> noteList = new ArrayList<>();
+    ArrayList<Note> filteredList = new ArrayList<>();
     public static final String CATEGORY_ID = "cate_id";
     SearchView searchView;
     private NoteAdapter noteAdapter;
@@ -117,7 +118,7 @@ public class NoteListActivity extends AppCompatActivity {
 
     private void filter(String text) {
         // creating a new array list to filter our data.
-        ArrayList<Note> filteredList = new ArrayList<>();
+        filteredList = new ArrayList<>();
 
         // running a for loop to compare elements.
         for (Note item : noteList) {
@@ -149,7 +150,13 @@ public class NoteListActivity extends AppCompatActivity {
             noteAppViewModel.getNotesByCategory(getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0)).observe(this, notes -> {
                 contact[0] = notes.get(position);
             });*/
-            Note contact = noteList.get(position);
+
+            Note contact;
+            if(filteredList.size() == 0){
+                contact = noteList.get(position);
+            } else {
+                contact = filteredList.get(position);
+            }
             switch (direction) {
                 case ItemTouchHelper.LEFT:
                     // confirmation dialog to ask user before delete contact
