@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,13 +29,8 @@ import com.madt.note_coding_comrades_android.model.Note;
 import com.madt.note_coding_comrades_android.model.NoteAppViewModel;
 import com.madt.note_coding_comrades_android.utilities.NoteUtils;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
@@ -54,7 +48,7 @@ public class NoteListActivity extends AppCompatActivity {
     SearchView searchView;
     private NoteAdapter noteAdapter;
     private int catId;
-    private String searchKey="";
+    private String searchKey = "";
 
 
     @Override
@@ -87,45 +81,10 @@ public class NoteListActivity extends AppCompatActivity {
         sortZA = findViewById(R.id.sortZA);
         sortDate = findViewById(R.id.sortDate);
 
-        sortAZ.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              /*  Comparator<Note> compareByName = (Note n1, Note n2) ->
-                        n1.getNoteName().compareTo(n2.getNoteName());
+        sortAZ.setOnClickListener(v -> getNoteLists(true, false, false));
 
-                Collections.sort(noteList, compareByName);
-                noteAdapter = new NoteAdapter(NoteListActivity.this, noteList);
-                rcNotes.setAdapter(noteAdapter);*/
-                getNoteLists(true, false,  false);
-            }
-        });
-
-        sortZA.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*Comparator<Note> compareByName = (Note n1, Note n2) ->
-                        n1.getNoteName().compareTo(n2.getNoteName());
-
-                Collections.sort(noteList, compareByName.reversed());
-                noteAdapter = new NoteAdapter(NoteListActivity.this, noteList);
-                rcNotes.setAdapter(noteAdapter);*/
-
-                getNoteLists(false, true,  false);
-            }
-        });
-        sortDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*Comparator<Note> compareByName = (Note n1, Note n2) ->
-                        n1.getNoteName().compareTo(n2.getNoteName());
-
-                Collections.sort(noteList, compareByName.reversed());
-                noteAdapter = new NoteAdapter(NoteListActivity.this, noteList);
-                rcNotes.setAdapter(noteAdapter);*/
-
-                getNoteLists(false, false,  true);
-            }
-        });
+        sortZA.setOnClickListener(v -> getNoteLists(false, true, false));
+        sortDate.setOnClickListener(v -> getNoteLists(false, false, true));
 
         noteAppViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication())
                 .create(NoteAppViewModel.class);
@@ -136,20 +95,11 @@ public class NoteListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-      /*  noteAppViewModel.getAllNotes().observe(this, notes -> {
-            noteList.clear();
-            noteList.addAll(notes);
 
-            NoteUtils.showLog("list size", noteList.size() + "");
-            NoteUtils.showLog("db list size", noteList.size() + "");
-
-            noteAdapter = new NoteAdapter(this, noteList);
-            rcNotes.setAdapter(noteAdapter);
-        });*/
         noteAdapter = new NoteAdapter(this, noteList);
         rcNotes.setAdapter(noteAdapter);
 
-        getNoteLists(true, false,  false);
+        getNoteLists(true, false, false);
 
         // below line is to call set on query text listener method.
         searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
@@ -161,9 +111,8 @@ public class NoteListActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 //Calling a method to filter Note List
-                // filter(newText);
                 searchKey = newText;
-                getNoteLists(true, false,  false);
+                getNoteLists(true, false, false);
                 return false;
             }
         });
@@ -172,23 +121,6 @@ public class NoteListActivity extends AppCompatActivity {
 
     }
 
-    private void filter(String text) {
-        // creating a new array list to filter our data.
-        filteredList = new ArrayList<>();
-
-        // running a for loop to compare elements.
-        for (Note item : noteList) {
-            // checking if the entered string matched with first name or last name  of contact list
-            if (item.getNoteName().toLowerCase().contains(text.toLowerCase())) {
-                // if the item is matched , adding it to filtered contact list
-                filteredList.add(item);
-            }
-        }
-
-
-        // passing that filtered list to adapter class.
-        noteAdapter.filterList(filteredList);
-    }
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
@@ -201,17 +133,7 @@ public class NoteListActivity extends AppCompatActivity {
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
             int position = viewHolder.getAdapterPosition();
-            /*final Note[] contact = new Note[1];
-            noteAppViewModel.getNotesByCategory(getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0)).observe(this, notes -> {
-                contact[0] = notes.get(position);
-            });*/
 
-         /*   Note contact;
-            if(filteredList.size() == 0){
-                contact = noteList.get(position);
-            } else {
-                contact = filteredList.get(position);
-            }*/
             switch (direction) {
                 case ItemTouchHelper.LEFT:
                     // confirmation dialog to ask user before delete contact
@@ -224,55 +146,62 @@ public class NoteListActivity extends AppCompatActivity {
                     AlertDialog alertDialogL = builderL.create();
                     alertDialogL.show();
                     break;
-                case  ItemTouchHelper.RIGHT:
-                    if( noteAppViewModel.getAllCategories().getValue().size() > 1 ){
+                case ItemTouchHelper.RIGHT:
 
+                    noteAppViewModel.getAllCategories().observe(NoteListActivity.this, categories -> {
+                        if (categories.size() > 1) {
+                            AlertDialog.Builder builderR = new AlertDialog.Builder(NoteListActivity.this);
+                            LayoutInflater layoutInflater = LayoutInflater.from(NoteListActivity.this);
+                            View view = layoutInflater.inflate(R.layout.dialog_move_note_category, null);
+                            builderR.setView(view);
 
-                        AlertDialog.Builder builderR = new AlertDialog.Builder(NoteListActivity.this);
-                        LayoutInflater layoutInflater = LayoutInflater.from(NoteListActivity.this);
-                        View view = layoutInflater.inflate(R.layout.dialog_move_note_category, null);
-                        builderR.setView(view);
+                            final AlertDialog alertDialogR = builderR.create();
+                            alertDialogR.show();
 
-                        final AlertDialog alertDialogR = builderR.create();
-                        alertDialogR.show();
-
-                        Spinner otherCategoriesSp = view.findViewById(R.id.otherCategoriesSp);
-                        List<Category> otherCats = noteAppViewModel.getAllCategoriesBut(catId).getValue();
-                        ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, otherCats);
-                        adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
-
-                        otherCategoriesSp.setAdapter(adapter);
-                        Button btnChange = view.findViewById(R.id.btnCreateCategory);
-
-                        btnChange.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                final Note note = noteList.get(position);
-                                final Category category = otherCats.get(otherCategoriesSp.getSelectedItemPosition());
-                                note.setNoteCategoryId(category.getCatId());
-                                noteAppViewModel.update(note);
+                            Spinner otherCategoriesSp = view.findViewById(R.id.otherCategoriesSp);
+                            List<Category> otherCats = categories;
+                            List<String> catNames= new ArrayList<>();
+                            for (Category category :categories){
+                                catNames.add(category.getCatName());
                             }
-                        });
-                    }else{
-                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(NoteListActivity.this);
-                        builder.setTitle("Alert");
-                        builder.setMessage("This is the only category");
+                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, catNames);
+                            adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
-                        builder.setCancelable(false);
-                        builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
+                            otherCategoriesSp.setAdapter(adapter);
+                            Button btnChange = view.findViewById(R.id.btnChangeCategory);
 
-                        builder.create().show();
-                    }
+                            btnChange.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    final Note note = noteList.get(position);
+                                    final Category category = otherCats.get(otherCategoriesSp.getSelectedItemPosition());
+                                    note.setNoteCategoryId(category.getCatId());
+                                    noteAppViewModel.update(note);
+                                }
+                            });
+                        } else {
+                            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(NoteListActivity.this);
+                            builder.setTitle("Alert");
+                            builder.setMessage("This is the only category");
+
+                            builder.setCancelable(false);
+                            builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            builder.create().show();
+                        }
+                    });
             }
         }
 
         @Override
-        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView
+                recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY,
+                                int actionState, boolean isCurrentlyActive) {
             new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     .setIconHorizontalMargin(1, 1)
                     .addSwipeLeftActionIcon(R.drawable.ic_delete)
@@ -316,14 +245,6 @@ public class NoteListActivity extends AppCompatActivity {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row_notes, parent, false);
 
             return new NoteAdapter.ViewHolder(view);
-        }
-
-        // method for filtering our recyclerview items.
-        public void filterList(ArrayList<Note> filterList) {
-            // add filtered list in adapter list
-            this.noteList = filterList;
-            // notify adapter changes in list
-            notifyDataSetChanged();
         }
 
         @Override
