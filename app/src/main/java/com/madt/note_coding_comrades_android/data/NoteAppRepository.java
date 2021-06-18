@@ -25,6 +25,7 @@ public class NoteAppRepository {
     public LiveData<List<Category>> getAllCategories() {
         return allCategories;
     }
+
     public LiveData<List<Category>> getAllCategoriesBut(int cateId) {
         return noteDao.getAllCategoriesBut(cateId);
     }
@@ -46,11 +47,13 @@ public class NoteAppRepository {
         NoteRoomDB.databaseWriteExecutor.execute(() -> noteDao.deleteNote(note));
     }
 
-    public LiveData<List<Note>> getNotesByCategory(int catId, boolean isAsc,boolean isDesc, String searchKey,boolean byDate) {
-       return noteDao.getNotesForCategory(catId,isAsc,isDesc,searchKey,byDate);
+    public LiveData<List<Note>> getNotesByCategory(int catId, boolean isAsc, boolean isDesc, String searchKey, boolean byDate) {
+        return noteDao.getNotesForCategory(catId, isAsc, isDesc, searchKey, byDate);
     }
-  public LiveData<List<Note>> getNotesByCategory(int catId) {
-       return noteDao.getNotesForCategory(catId);
+
+    // Get notes by Category
+    public LiveData<List<Note>> getNotesByCategory(int catId) {
+        return noteDao.getNotesForCategory(catId);
     }
 
     // updates a note
@@ -58,8 +61,17 @@ public class NoteAppRepository {
         NoteRoomDB.databaseWriteExecutor.execute(() -> noteDao.update(note));
     }
 
-    public LiveData<Note> getNoteById(int id){
+    // updates a note
+    public void updateCategory(Category category) {
+        NoteRoomDB.databaseWriteExecutor.execute(() -> noteDao.updateCategory(category));
+    }
+
+
+    // Get a note by Id
+    public LiveData<Note> getNoteById(int id) {
         return noteDao.getNoteById(id);
+    }  public LiveData<Category> getCategoryById(int id) {
+        return noteDao.getCategoryById(id);
     }
 }
 

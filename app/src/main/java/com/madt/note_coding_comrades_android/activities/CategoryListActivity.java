@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,23 +41,15 @@ public class CategoryListActivity extends AppCompatActivity {
         noteAppViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication())
                 .create(NoteAppViewModel.class);
 
-/*
-
-        noteAppViewModel.insertCategory(new Category("Music"));
-        noteAppViewModel.insertCategory(new Category("Games"));
-
-*/
-
         noteAppViewModel.getAllCategories().observe(this, categories -> {
             categoryList.clear();
             categoryList.addAll(categories);
-            NoteUtils.showLog("list size",categoryList.size()+"");
-            NoteUtils.showLog("db list size",categories.size()+"");
+            NoteUtils.showLog("list size", categoryList.size() + "");
+            NoteUtils.showLog("db list size", categories.size() + "");
             rcCategories = findViewById(R.id.rcCategories);
             rcCategories.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
             rcCategories.setAdapter(new CategoryAdapter(this, categoryList));
         });
-
 
 
         createCategory = findViewById(R.id.createCategory);
@@ -88,7 +79,7 @@ public class CategoryListActivity extends AppCompatActivity {
                             alertBox("Category name already exist!");
                             return;
                         }
-                       // categoryList.add(new Category(categoryName));
+                        // categoryList.add(new Category(categoryName));
                         noteAppViewModel.insertCategory(new Category(categoryName));
                         alertDialog.dismiss();
                     }
@@ -123,7 +114,7 @@ public class CategoryListActivity extends AppCompatActivity {
         CategoryAdapter(Activity activity, ArrayList<Category> categoryList) {
             this.activity = activity;
             this.categoryList = categoryList;
-            NoteUtils.showLog("adpter list size",categoryList.size()+"");
+            NoteUtils.showLog("adpter list size", categoryList.size() + "");
         }
 
         @NonNull
@@ -148,6 +139,14 @@ public class CategoryListActivity extends AppCompatActivity {
                 }
             });
 
+            holder.categoryNameTV.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    renameCategoryDialog(categoryList.get(position).getCatId());
+                    return false;
+                }
+            });
+
 
         }
 
@@ -166,7 +165,51 @@ public class CategoryListActivity extends AppCompatActivity {
 
                 categoryNameTV = itemView.findViewById(R.id.categoryNameTV);
 
+
             }
+        }
+
+
+        void renameCategoryDialog(int catId) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(CategoryListActivity.this);
+            LayoutInflater layoutInflater = LayoutInflater.from(CategoryListActivity.this);
+            View view = layoutInflater.inflate(R.layout.dialog_create_category, null);
+            builder.setView(view);
+
+            final AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+
+            EditText categoryNameET = view.findViewById(R.id.categoryNameET);
+            TextView txtLavel = view.findViewById(R.id.txtLabel);
+            Button btnCreate = view.findViewById(R.id.btnCreateCategory);
+
+            txtLavel.setText("Rename Category");
+            btnCreate.setText("Rename");
+
+            btnCreate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String categoryName = categoryNameET.getText().toString().trim();
+                    if (categoryName.isEmpty()) {
+                        alertBox("Please enter value for Category name");
+                        return;
+                    }
+                    if (categoryList.contains(categoryName)) {
+                        alertBox("Category name already exist!");
+                        return;
+                    }
+
+                    noteAppViewModel.getCategoryById(catId).observe(CategoryListActivity.this, category -> {
+                        category.setCatName(categoryName);
+                        noteAppViewModel.updateCategory(category);
+                        alertDialog.dismiss();
+
+                    });
+
+
+                }
+            });
         }
 
     }
