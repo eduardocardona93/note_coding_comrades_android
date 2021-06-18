@@ -86,7 +86,7 @@ public class NoteDetailActivity extends AppCompatActivity {
     ArrayList<Note> noteList = new ArrayList<>();
     private int catID = 0;
     ImageButton btnPlay, btnRecord;
-    ImageView btnBack, uploadImage;
+    ImageView btnBack, uploadImage, mapIcon;
     TextView saveTV;
     View audioBannerV;
     EditText titleET, detailET;
@@ -266,7 +266,17 @@ public class NoteDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        mapIcon = findViewById(R.id.mapIcon);
+        mapIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NoteDetailActivity.this, MapsActivity.class);
+                intent.putExtra("note_longitude", latLangNote.longitude);
+                intent.putExtra("note_latitude",  latLangNote.latitude);
+                startActivity(intent);
+            }
+        });
+        // text elements
         titleET = findViewById(R.id.titleET);
         detailET = findViewById(R.id.detailET);
 

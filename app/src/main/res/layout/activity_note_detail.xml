@@ -11,12 +11,12 @@
         android:id="@+id/uploadImage"
         android:layout_width="140dp"
         android:layout_height="140dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_blank_image"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3"
-        android:src="@drawable/ic_blank_image"/>
+        app:layout_constraintTop_toBottomOf="@+id/button3" />
 
     <View
         android:id="@+id/button3"
@@ -80,7 +80,7 @@
         android:layout_width="354dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
         android:text="@string/description"
         android:textColor="#0E0E0E"
@@ -122,7 +122,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:text="@string/audio"
 
         android:textColor="#0E0E0E"
@@ -165,17 +165,15 @@
 
     <TextView
         android:id="@+id/locationDetailsTV"
-        android:layout_width="349dp"
-        android:layout_height="60dp"
+        android:layout_width="300dp"
+        android:layout_height="58dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="30dp"
         android:gravity="center"
         android:text="@string/gettingLocationPH"
         android:textAlignment="center"
         android:textColor="#2196F3"
         android:textStyle="bold|italic"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/audioBannerV" />
 
@@ -190,5 +188,15 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/mapIcon"
+        android:layout_width="55dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toEndOf="@+id/locationDetailsTV"
+        app:layout_constraintTop_toBottomOf="@+id/audioBannerV"
+        app:srcCompat="@android:drawable/ic_dialog_map"
+        app:tint="#1976D2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
