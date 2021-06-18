@@ -35,14 +35,16 @@
         <activity
             android:name=".activities.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
-        <activity android:name=".activities.SplashActivity" />
-        <activity android:name=".activities.NoteListActivity" />
-        <activity android:name=".activities.CategoryListActivity">
+        <activity android:name=".activities.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activities.NoteListActivity" />
+        <activity android:name=".activities.CategoryListActivity">
+
         </activity>
         <activity android:name=".activities.AddEditNoteActivity" />
         <activity android:name=".activities.NoteDetailActivity" />
