@@ -51,6 +51,9 @@ public interface NoteDao {
     @Query("DELETE FROM note")
     void deleteAllNotes();
 
+    @Query("DELETE FROM category WHERE cat_id = :cateId")
+    void deleteCategory(int cateId);
+
     @Delete
     void deleteNote(Note note);
 

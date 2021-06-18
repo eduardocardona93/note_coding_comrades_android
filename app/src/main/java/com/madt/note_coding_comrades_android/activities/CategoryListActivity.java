@@ -139,13 +139,22 @@ public class CategoryListActivity extends AppCompatActivity {
                 }
             });
 
-            /*holder.categoryNameTV.setOnLongClickListener(new View.OnLongClickListener() {
+            holder.categoryNameTV.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    renameCategoryDialog(categoryList.get(position).getCatId());
+                    // confirmation dialog to ask user before delete contact
+                    androidx.appcompat.app.AlertDialog.Builder builderL = new androidx.appcompat.app.AlertDialog.Builder(CategoryListActivity.this);
+                    builderL.setTitle("Are you sure you want to delete this Category?");
+                    builderL.setPositiveButton("Yes", (dialog, which) -> {
+                        noteAppViewModel.deleteCategory(categoryList.get(position).getCatId());
+                    });
+                    builderL.setNegativeButton("No", (dialog, which) -> {});
+                    androidx.appcompat.app.AlertDialog alertDialogL = builderL.create();
+
+                    alertDialogL.show();
                     return false;
                 }
-            });*/
+            });
         }
 
         @Override

@@ -133,7 +133,7 @@ public class NoteListActivity extends AppCompatActivity {
                 case ItemTouchHelper.LEFT:
                     // confirmation dialog to ask user before delete contact
                     AlertDialog.Builder builderL = new AlertDialog.Builder(NoteListActivity.this);
-                    builderL.setTitle("Are you sure you want to delete this contact?");
+                    builderL.setTitle("Are you sure you want to delete this note?");
                     builderL.setPositiveButton("Yes", (dialog, which) -> {
                         noteAppViewModel.delete(noteList.get(position));
                     });

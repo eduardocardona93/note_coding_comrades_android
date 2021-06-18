@@ -57,7 +57,9 @@ public class NoteAppViewModel extends AndroidViewModel {
     public void delete(Note note) {
         repository.delete(note);
     }
-
+    public void deleteCategory(int cateId) {
+        repository.deleteCategory(cateId);
+    }
     public void update(Note note) {
         repository.update(note);
     }
