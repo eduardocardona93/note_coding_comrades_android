@@ -28,6 +28,7 @@ import com.madt.note_coding_comrades_android.utilities.NoteUtils;
 import java.util.ArrayList;
 
 public class CategoryListActivity extends AppCompatActivity {
+
     RecyclerView rcCategories;
     ImageView createCategory;
     private NoteAppViewModel noteAppViewModel;
@@ -50,7 +51,6 @@ public class CategoryListActivity extends AppCompatActivity {
             rcCategories.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
             rcCategories.setAdapter(new CategoryAdapter(this, categoryList));
         });
-
 
         createCategory = findViewById(R.id.createCategory);
         createCategory.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +79,7 @@ public class CategoryListActivity extends AppCompatActivity {
                             alertBox("Category name already exist!");
                             return;
                         }
-                        // categoryList.add(new Category(categoryName));
+
                         noteAppViewModel.insertCategory(new Category(categoryName));
                         alertDialog.dismiss();
                     }
@@ -146,8 +146,6 @@ public class CategoryListActivity extends AppCompatActivity {
                     return false;
                 }
             });*/
-
-
         }
 
         @Override
@@ -159,16 +157,12 @@ public class CategoryListActivity extends AppCompatActivity {
 
             TextView categoryNameTV;
 
-
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
 
                 categoryNameTV = itemView.findViewById(R.id.categoryNameTV);
-
-
             }
         }
-
 
         void renameCategoryDialog(int catId) {
 
@@ -206,9 +200,6 @@ public class CategoryListActivity extends AppCompatActivity {
                         alertDialog.dismiss();
 
                     });
-
-                    //rcCategories.setAdapter(new CategoryAdapter(CategoryHavingNotes.this, categoryList));
-
                 }
             });
         }

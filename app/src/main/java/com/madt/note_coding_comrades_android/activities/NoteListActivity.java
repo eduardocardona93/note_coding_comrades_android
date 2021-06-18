@@ -50,7 +50,6 @@ public class NoteListActivity extends AppCompatActivity {
     private int catId;
     private String searchKey = "";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,8 +87,6 @@ public class NoteListActivity extends AppCompatActivity {
 
         noteAppViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication())
                 .create(NoteAppViewModel.class);
-
-
     }
 
     @Override
@@ -118,9 +115,7 @@ public class NoteListActivity extends AppCompatActivity {
         });
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(rcNotes);
-
     }
-
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
@@ -294,7 +289,6 @@ public class NoteListActivity extends AppCompatActivity {
                     }
                 });
             }
-
         }
     }
 

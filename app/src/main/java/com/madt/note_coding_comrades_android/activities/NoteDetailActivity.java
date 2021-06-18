@@ -19,7 +19,6 @@ import android.location.Location;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,7 +35,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -107,7 +105,6 @@ public class NoteDetailActivity extends AppCompatActivity {
 
     ActivityResultLauncher<Intent> someActivityResultLauncher;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,7 +131,6 @@ public class NoteDetailActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-
                     mediaPlayer.start();
                     audioBannerV.setBackgroundColor(Color.parseColor("#FF00DD00"));
                     btnPlay.setImageResource(R.drawable.pause_icon_f);
@@ -146,7 +142,6 @@ public class NoteDetailActivity extends AppCompatActivity {
                             btnRecord.setEnabled(true);
                             btnPlay.setImageResource(R.drawable.play_btn_f);
                             audioBannerV.setBackgroundResource(R.color.dark_app_color);
-
                         }
                     });
                 } else {
@@ -155,10 +150,8 @@ public class NoteDetailActivity extends AppCompatActivity {
                     mediaPlayer.pause();
                     btnPlay.setImageResource(R.drawable.play_btn_f);
                     audioBannerV.setBackgroundResource(R.color.dark_app_color);
-
                 }
                 isPlaying = !isPlaying;
-
             }
         });
         btnRecord = findViewById(R.id.recorderBtn);
@@ -184,19 +177,13 @@ public class NoteDetailActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                 }
             } else {
-
                 mediaRecorder.stop();
                 btnPlay.setEnabled(true);
                 btnPlay.setVisibility(View.VISIBLE);
                 scrubberSld.setVisibility(View.VISIBLE);
                 audioBannerV.setBackgroundResource(R.color.dark_app_color);
-
-
-
-
             }
             isRecording = !isRecording;
         });
@@ -232,15 +219,14 @@ public class NoteDetailActivity extends AppCompatActivity {
                 String strDate = dateFormat.format(date);
                 System.out.println("Converted String: " + strDate);
 
-
                 String title = titleET.getText().toString().trim();
                 String detail = detailET.getText().toString().trim();
 
                  if (title.isEmpty()) {
                     alertBox("Title can not be empty!");
-                } else if (detail.isEmpty()) {
+                 } else if (detail.isEmpty()) {
                     alertBox("Description can not be empty!");
-                }else if (latLangNote == null) {
+                 } else if (latLangNote == null) {
                     alertBox("Wait until the location is set");
                  } else {
                      byte[] imageInByte = null;
@@ -309,16 +295,13 @@ public class NoteDetailActivity extends AppCompatActivity {
         titleET = findViewById(R.id.titleET);
         detailET = findViewById(R.id.detailET);
 
-
         audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
         // set the volume of played media to maximum.
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
 
-
         catID = getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0);
         noteId = getIntent().getIntExtra("note_id", -1) ;
         if(noteId  > 0){
-
             latLangNote = new LatLng(getIntent().getDoubleExtra("note_latitude" , 0), getIntent().getDoubleExtra("note_longitude" , 0));
             titleET.setText(getIntent().getStringExtra("note_name"));
             detailET.setText(getIntent().getStringExtra("note_detail"));
@@ -400,7 +383,6 @@ public class NoteDetailActivity extends AppCompatActivity {
         }
     }
 
-
     private void setUpMediaRecorder() {
         mediaRecorder = new MediaRecorder();
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -409,7 +391,6 @@ public class NoteDetailActivity extends AppCompatActivity {
         mediaRecorder.setOutputFile(pathSave);
 
     }
-
 
     //------------------------location methods
     @SuppressLint("MissingPermission")
@@ -466,8 +447,6 @@ public class NoteDetailActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace(); // catch the error
                     }
-
-
                 }
             }
         };
@@ -507,7 +486,6 @@ public class NoteDetailActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         requestPermissions(permissionsRejected.toArray(new String[permissionsRejected.size()]), REQUEST_CODE);
-
                                     }
                                 }).setNegativeButton("Cancel", null)
                                 .create()
