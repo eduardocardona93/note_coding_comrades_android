@@ -1,6 +1,7 @@
 package com.madt.note_coding_comrades_android.activities;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
@@ -210,31 +211,49 @@ public class NoteListActivity extends AppCompatActivity {
                     alertDialogL.show();
                     break;
                 case  ItemTouchHelper.RIGHT:
-                    AlertDialog.Builder builderR = new AlertDialog.Builder(NoteListActivity.this);
-                    LayoutInflater layoutInflater = LayoutInflater.from(NoteListActivity.this);
-                    View view = layoutInflater.inflate(R.layout.dialog_move_note_category, null);
-                    builderR.setView(view);
+                    if( noteAppViewModel.getAllCategories().getValue().size() > 1 ){
 
-                    final AlertDialog alertDialogR = builderR.create();
-                    alertDialogR.show();
 
-                    Spinner otherCategoriesSp = view.findViewById(R.id.otherCategoriesSp);
-                    List<Category> otherCats = noteAppViewModel.getAllCategoriesBut(catId).getValue();
-                    ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, otherCats);
-                    adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+                        AlertDialog.Builder builderR = new AlertDialog.Builder(NoteListActivity.this);
+                        LayoutInflater layoutInflater = LayoutInflater.from(NoteListActivity.this);
+                        View view = layoutInflater.inflate(R.layout.dialog_move_note_category, null);
+                        builderR.setView(view);
 
-                    otherCategoriesSp.setAdapter(adapter);
-                    Button btnChange = view.findViewById(R.id.btnCreateCategory);
+                        final AlertDialog alertDialogR = builderR.create();
+                        alertDialogR.show();
 
-                    btnChange.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final Note note = noteList.get(position);
-                            final Category category = otherCats.get(otherCategoriesSp.getSelectedItemPosition());
-                            note.setNoteCategoryId(category.getCatId());
-                            noteAppViewModel.update(note);
-                        }
-                    });
+                        Spinner otherCategoriesSp = view.findViewById(R.id.otherCategoriesSp);
+                        List<Category> otherCats = noteAppViewModel.getAllCategoriesBut(catId).getValue();
+                        ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, otherCats);
+                        adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+
+                        otherCategoriesSp.setAdapter(adapter);
+                        Button btnChange = view.findViewById(R.id.btnCreateCategory);
+
+                        btnChange.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final Note note = noteList.get(position);
+                                final Category category = otherCats.get(otherCategoriesSp.getSelectedItemPosition());
+                                note.setNoteCategoryId(category.getCatId());
+                                noteAppViewModel.update(note);
+                            }
+                        });
+                    }else{
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(NoteListActivity.this);
+                        builder.setTitle("Alert");
+                        builder.setMessage("This is the only category");
+
+                        builder.setCancelable(false);
+                        builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        builder.create().show();
+                    }
             }
         }
 
