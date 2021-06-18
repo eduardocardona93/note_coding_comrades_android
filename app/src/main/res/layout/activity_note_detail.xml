@@ -62,7 +62,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <View
-        android:id="@+id/textView4"
+        android:id="@+id/audioBannerV"
         android:layout_width="354dp"
         android:layout_height="58dp"
         android:layout_marginStart="30dp"
@@ -138,14 +138,14 @@
         android:layout_marginStart="10dp"
         android:background="#00FFFFFF"
 
-        app:layout_constraintBottom_toBottomOf="@+id/textView4"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toTopOf="@+id/textView4"
+        app:layout_constraintBottom_toBottomOf="@+id/audioBannerV"
+        app:layout_constraintStart_toStartOf="@+id/audioBannerV"
+        app:layout_constraintTop_toTopOf="@+id/audioBannerV"
         app:srcCompat="@drawable/record_action_btn" />
 
     <SeekBar
         android:id="@+id/scrubberSld"
-        android:layout_width="195dp"
+        android:layout_width="215dp"
         android:layout_height="17dp"
         android:layout_marginStart="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/recorderBtn"
@@ -154,8 +154,8 @@
 
     <ImageButton
         android:id="@+id/playerBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="42dp"
+        android:layout_height="36dp"
         android:layout_marginStart="20dp"
         android:background="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="@+id/scrubberSld"
@@ -163,32 +163,21 @@
         app:layout_constraintTop_toTopOf="@+id/scrubberSld"
         app:srcCompat="@drawable/play_btn_f" />
 
-    <ImageButton
-        android:id="@+id/pauseBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:background="#00FFFFFF"
-        app:layout_constraintBottom_toBottomOf="@+id/scrubberSld"
-        app:layout_constraintEnd_toEndOf="@+id/textView4"
-        app:layout_constraintStart_toEndOf="@+id/playerBtn"
-        app:layout_constraintTop_toTopOf="@+id/scrubberSld"
-        app:srcCompat="@drawable/pause_icon_f" />
-
     <TextView
-        android:id="@+id/textView16"
-        android:layout_width="354dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/locationDetailsTV"
+        android:layout_width="349dp"
+        android:layout_height="60dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
-        android:text="Mapa"
+        android:gravity="center"
+        android:text="@string/gettingLocationPH"
         android:textAlignment="center"
         android:textColor="#2196F3"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/audioBannerV" />
 
     <TextView
         android:id="@+id/saveTV"

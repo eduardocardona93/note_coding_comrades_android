@@ -19,8 +19,7 @@ public class Note {
     @ColumnInfo(name = "note_id")
     private int noteId;
 
-
-
+    @NonNull
     private int noteCategoryId;
 
     @NonNull
@@ -33,38 +32,27 @@ public class Note {
 
     @ColumnInfo(name = "note_image", typeAffinity = ColumnInfo.BLOB)
     private byte[] noteImage;
-/*
-    @ColumnInfo(name = "note_recording")
-    private Blob noteRecording;
-*/
 
-   /* public Note(int noteId, int noteCategoryId, @NonNull String noteName, @NonNull String noteDetail, Blob noteImage, Blob noteRecording) {
-        this.noteId = noteId;
+    @ColumnInfo(name = "note_recording_path")
+    private String noteRecordingPath;
+
+    @NonNull
+    @ColumnInfo(name = "note_latitude")
+    private Double noteLatitude;
+
+    @NonNull
+    @ColumnInfo(name = "note_longitude")
+    private Double noteLongitude;
+
+
+    public Note(@NonNull int noteCategoryId, @NonNull String noteName, @NonNull String noteDetail, byte[] noteImage, String noteRecordingPath,@NonNull Double noteLatitude,@NonNull Double noteLongitude) {
         this.noteCategoryId = noteCategoryId;
         this.noteName = noteName;
         this.noteDetail = noteDetail;
-       *//* this.noteImage = noteImage;
-        this.noteRecording = noteRecording;*//*
-    }*/
-  /*public Note(int noteId, int noteCategoryId, @NonNull String noteName, @NonNull String noteDetail) {
-        this.noteId = noteId;
-        this.noteCategoryId = noteCategoryId;
-        this.noteName = noteName;
-        this.noteDetail = noteDetail;
-       *//* this.noteImage = noteImage;
-        this.noteRecording = noteRecording;*//*
-    }*/
-
-    public Note(@NonNull String noteName, @NonNull String noteDetail, int noteCategoryId, byte[] noteImage) {
-        this.noteName = noteName;
-        this.noteDetail = noteDetail;
-        this.noteCategoryId=noteCategoryId;
         this.noteImage = noteImage;
-        /*this.noteRecording = noteRecording;*/
-    }
-
-    public int getNoteCategoryId() {
-        return noteCategoryId;
+        this.noteRecordingPath = noteRecordingPath;
+        this.noteLatitude = noteLatitude;
+        this.noteLongitude = noteLongitude;
     }
 
     public int getNoteId() {
@@ -73,6 +61,10 @@ public class Note {
 
     public void setNoteId(int noteId) {
         this.noteId = noteId;
+    }
+
+    public int getNoteCategoryId() {
+        return noteCategoryId;
     }
 
     public void setNoteCategoryId(int noteCategoryId) {
@@ -105,11 +97,27 @@ public class Note {
         this.noteImage = noteImage;
     }
 
-   /* public Blob getNoteRecording() {
-        return noteRecording;
+    public String getNoteRecordingPath() {
+        return noteRecordingPath;
     }
 
-    public void setNoteRecording(Blob noteRecording) {
-        this.noteRecording = noteRecording;
-    }*/
+    public void setNoteRecordingPath(String noteRecordingPath) {
+        this.noteRecordingPath = noteRecordingPath;
+    }
+
+    public Double getNoteLatitude() {
+        return noteLatitude;
+    }
+
+    public void setNoteLatitude(Double noteLatitude) {
+        this.noteLatitude = noteLatitude;
+    }
+
+    public Double getNoteLongitude() {
+        return noteLongitude;
+    }
+
+    public void setNoteLongitude(Double noteLongitude) {
+        this.noteLongitude = noteLongitude;
+    }
 }

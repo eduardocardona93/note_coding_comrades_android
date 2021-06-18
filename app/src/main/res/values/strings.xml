@@ -6,4 +6,6 @@
     <string name="description">Description</string>
     <string name="back">Back</string>
     <string name="audio">Audio</string>
+    <string name="gettingLocationPH">Getting Location...</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

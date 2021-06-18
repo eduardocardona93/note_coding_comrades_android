@@ -1,6 +1,7 @@
 package com.madt.note_coding_comrades_android.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -40,6 +42,8 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.madt.note_coding_comrades_android.R;
 import com.madt.note_coding_comrades_android.model.Note;
@@ -49,8 +53,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 
 public class NoteDetailActivity extends AppCompatActivity {
@@ -63,12 +69,14 @@ public class NoteDetailActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
-    TextView locationDetailsTV, longitudeTV, latitudeTV;
+    TextView locationDetailsTV;
     Geocoder geocoder;
+    LatLng latLangNote = null;
     List<Address> addresses;
 
     private static final int UPDATE_INTERVAL = 5000; // 5 seconds
-    private static final int FASTEST_INTERVAL = 3000; // 3 seconds
+    private static final int FASTEST_INTERVAL = 1000; // 3 seconds
+    private static final int SMALLEST_DISPLACEMENT = 200; // 200 meters
 
     private List<String> permissionsToRequest;
     private List<String> permissions = new ArrayList<>();
@@ -77,11 +85,12 @@ public class NoteDetailActivity extends AppCompatActivity {
     private NoteAppViewModel noteAppViewModel;
     ArrayList<Note> noteList = new ArrayList<>();
     private int catID = 0;
-    ImageButton btnPlay, btnRecord, btnPause;
-    ImageView btnBack, uploadImage, imageView;
+    ImageButton btnPlay, btnRecord;
+    ImageView btnBack, uploadImage;
     TextView saveTV;
+    View audioBannerV;
     EditText titleET, detailET;
-    String pathSave = "";
+    String pathSave = "", recordFile = null;
     MediaRecorder mediaRecorder;
     SeekBar scrubberSld;
     MediaPlayer mediaPlayer;
@@ -97,66 +106,10 @@ public class NoteDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_detail);
 
-
+        // audio elements
+        audioBannerV = findViewById(R.id.audioBannerV);
         btnPlay = findViewById(R.id.playerBtn);
-        btnPause = findViewById(R.id.pauseBtn);
         btnPlay.setVisibility(View.GONE);
-        btnRecord = findViewById(R.id.recorderBtn);
-        scrubberSld = findViewById(R.id.scrubberSld);
-        btnBack = findViewById(R.id.backBtn);
-        uploadImage = findViewById(R.id.uploadImage);
-        imageView = findViewById(R.id.uploadImage);
-        scrubberSld.setVisibility(View.GONE);
-
-        audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-        // set the volume of played media to maximum.
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
-        permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        permissions.add(Manifest.permission.RECORD_AUDIO);
-
-        catID = getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0);
-        btnRecord.setOnClickListener(v -> {
-            if (!isRecording) {
-                if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) && hasPermission(Manifest.permission.RECORD_AUDIO)) {
-                    pathSave = getExternalCacheDir().getAbsolutePath()
-                            + RECORDED_FILE;
-
-                    setUpMediaRecorder();
-
-                    try {
-                        mediaRecorder.prepare();
-                        mediaRecorder.start();
-
-
-                        btnPlay.setEnabled(false);
-                        btnPlay.setVisibility(View.GONE);
-                        scrubberSld.setVisibility(View.GONE);
-                        Toast.makeText(NoteDetailActivity.this, "Recording...", Toast.LENGTH_SHORT).show();
-                    } catch (IllegalStateException ise) {
-                        // make something ...
-                        ise.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                } else
-                    Log.i(TAG, "Set permissions: ");
-                //TODO
-            } else {
-
-                mediaRecorder.stop();
-                btnPlay.setEnabled(true);
-                btnPlay.setVisibility(View.VISIBLE);
-                scrubberSld.setVisibility(View.VISIBLE);
-
-
-            }
-            isRecording = !isRecording;
-        });
-
-        btnBack.setOnClickListener(v -> {
-            finish();
-        });
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,29 +126,75 @@ public class NoteDetailActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+
+
+                    mediaPlayer.start();
+                    audioBannerV.setBackgroundColor(Color.parseColor("#FF00DD00"));
+                    btnPlay.setImageResource(R.drawable.pause_icon_f);
+                    Toast.makeText(NoteDetailActivity.this, "Playing...", Toast.LENGTH_SHORT).show();
                     mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
                             scrubberSld.setProgress(0);
                             btnRecord.setEnabled(true);
-
-                            //btnPlay.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_media_play, 0, 0, 0);
+                            btnPlay.setImageResource(R.drawable.play_btn_f);
+                            audioBannerV.setBackgroundResource(R.color.dark_app_color);
 
                         }
                     });
-
-                    mediaPlayer.start();
-                    Toast.makeText(NoteDetailActivity.this, "Playing...", Toast.LENGTH_SHORT).show();
                 } else {
                     btnRecord.setEnabled(true);
                     //btnPlay.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_media_play, 0, 0, 0);
                     mediaPlayer.pause();
+                    btnPlay.setImageResource(R.drawable.play_btn_f);
+                    audioBannerV.setBackgroundResource(R.color.dark_app_color);
 
                 }
                 isPlaying = !isPlaying;
 
             }
         });
+        btnRecord = findViewById(R.id.recorderBtn);
+        btnRecord.setOnClickListener(v -> {
+            if (!isRecording) {
+                if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) && hasPermission(Manifest.permission.RECORD_AUDIO)) {
+                    recordFile = "/" + UUID.randomUUID().toString() + ".3gp";
+                    pathSave = getExternalCacheDir().getAbsolutePath()  + recordFile ;
+                    setUpMediaRecorder();
+
+                    try {
+                        mediaRecorder.prepare();
+                        mediaRecorder.start();
+
+                        btnPlay.setEnabled(false);
+                        btnPlay.setVisibility(View.GONE);
+                        scrubberSld.setVisibility(View.GONE);
+                        Toast.makeText(NoteDetailActivity.this, "Recording...", Toast.LENGTH_SHORT).show();
+                        audioBannerV.setBackgroundColor(Color.parseColor("#FFFF0000"));
+                    } catch (IllegalStateException ise) {
+                        // make something ...
+                        ise.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            } else {
+
+                mediaRecorder.stop();
+                btnPlay.setEnabled(true);
+                btnPlay.setVisibility(View.VISIBLE);
+                scrubberSld.setVisibility(View.VISIBLE);
+                audioBannerV.setBackgroundResource(R.color.dark_app_color);
+
+
+
+
+            }
+            isRecording = !isRecording;
+        });
+        scrubberSld = findViewById(R.id.scrubberSld);
+        scrubberSld.setVisibility(View.GONE);
         scrubberSld.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -212,6 +211,77 @@ public class NoteDetailActivity extends AppCompatActivity {
 
             }
         });
+        // top bar elements
+        btnBack = findViewById(R.id.backBtn);
+        btnBack.setOnClickListener(v -> {
+            finish();
+        });
+        saveTV = findViewById(R.id.saveTV);
+        saveTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String title = titleET.getText().toString().trim();
+                String detail = detailET.getText().toString().trim();
+
+                 if (title.isEmpty()) {
+                    alertBox("Title can not be empty!");
+                } else if (detail.isEmpty()) {
+                    alertBox("Description can not be empty!");
+                } else {
+                     byte[] imageInByte = null;
+                     if(uploadImage.getDrawable() != null){
+                         Bitmap bitmap = ((BitmapDrawable) uploadImage.getDrawable()).getBitmap();
+                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                         bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos);
+                         imageInByte = baos.toByteArray();
+                     }
+                     if(recordFile != null){
+
+                     }
+
+                    noteAppViewModel.insertNote(new Note(catID, title, detail,  imageInByte,recordFile , latLangNote.latitude ,latLangNote.longitude));
+
+                    finish();
+                }
+            }
+        });
+        // image elements
+        uploadImage = findViewById(R.id.uploadImage);
+        uploadImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE_CODE);
+                } else {
+                    pickImageFromGalary();
+                }
+            }
+        });
+
+        // location elements
+        locationDetailsTV = findViewById(R.id.locationDetailsTV);
+        locationDetailsTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NoteDetailActivity.this, MapsActivity.class);
+                intent.putExtra("note_longitude", latLangNote.longitude);
+                intent.putExtra("note_latitude",  latLangNote.latitude);
+                startActivity(intent);
+            }
+        });
+
+        titleET = findViewById(R.id.titleET);
+        detailET = findViewById(R.id.detailET);
+
+
+        audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        // set the volume of played media to maximum.
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+
+
+        catID = getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0);
+
+
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -222,66 +292,13 @@ public class NoteDetailActivity extends AppCompatActivity {
         }, 0, 300);
 
         // LOCATION INIT
-        /*geocoder = new Geocoder(this, Locale.getDefault());
-        longitudeTV = findViewById(R.id.longitudeTV);
-        latitudeTV = findViewById(R.id.latitudeTV);
-        locationDetailsTV = findViewById(R.id.locationDetailsTV);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
-
-        // add permissions
-
-
-        permissionsToRequest = permissionsToRequest(permissions);
-        if (permissionsToRequest.size() > 0) {
-            requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), REQUEST_CODE);
-        }*/
-
-        uploadImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
-                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE_CODE);
-                } else {
-                    pickImageFromGalary();
-                }
-            }
-        });
-
-        noteAppViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication())
-                .create(NoteAppViewModel.class);
-
-        saveTV = findViewById(R.id.saveTV);
-        titleET = findViewById(R.id.titleET);
-        detailET = findViewById(R.id.detailET);
-
-        saveTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String title = titleET.getText().toString().trim();
-                String detail = detailET.getText().toString().trim();
-
-                Bitmap bitmap = ((BitmapDrawable) uploadImage.getDrawable()).getBitmap();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos);
-                byte[] imageInByte = baos.toByteArray();
-
-                if (title.isEmpty()) {
-                    alertBox("Title can not be empty!");
-                } else if (detail.isEmpty()) {
-                    alertBox("Description can not be empty!");
-                } else {
-                    noteAppViewModel.insertNote(new Note(title, detail, catID, imageInByte));
-
-                    finish();
-                }
-            }
-        });
+        // view model
+        noteAppViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication()).create(NoteAppViewModel.class);
 
         // You can do the assignment inside onAttach or onCreate, i.e, before the activity is displayed
-         someActivityResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
+        someActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
@@ -293,7 +310,15 @@ public class NoteDetailActivity extends AppCompatActivity {
                     }
                 });
 
-
+        // add permissions
+        permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        permissions.add(Manifest.permission.RECORD_AUDIO);
+        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        permissionsToRequest = permissionsToRequest(permissions);
+        if (permissionsToRequest.size() > 0)
+            requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), REQUEST_CODE);
+        else
+            startUpdateLocation();
     }
 
     @Override
@@ -315,7 +340,7 @@ public class NoteDetailActivity extends AppCompatActivity {
             errorDialog.show();
         } else {
             Log.i(TAG, "onPostResume: ");
-            findLocation();
+//            findLocation();
         }
     }
 
@@ -331,17 +356,12 @@ public class NoteDetailActivity extends AppCompatActivity {
 
 
     //------------------------location methods
+    @SuppressLint("MissingPermission")
     private void findLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
-                    longitudeTV.setText(String.format("Lng: %s", location.getLongitude()));
-                    latitudeTV.setText(String.format("Lat: %s", location.getLatitude()));
                     locationDetailsTV.setText(String.format("Accuracy: %s,Altitude: %s", location.getAccuracy(), location.getAltitude()));
                 }
             }
@@ -350,46 +370,51 @@ public class NoteDetailActivity extends AppCompatActivity {
         startUpdateLocation();
     }
 
+    @SuppressLint("MissingPermission")
     private void startUpdateLocation() {
         Log.d(TAG, "startUpdateLocation: ");
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(UPDATE_INTERVAL);
         locationRequest.setFastestInterval(FASTEST_INTERVAL);
-
+        locationRequest.setSmallestDisplacement(SMALLEST_DISPLACEMENT);
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
+                geocoder = new Geocoder(getApplicationContext(), Locale.getDefault()); // sets the geocoder object
 
                 if (locationResult != null) {
                     Location location = locationResult.getLastLocation();
-                    longitudeTV.setText(String.format("Lng: %s", location.getLongitude()));
-                    latitudeTV.setText(String.format("Lat: %s", location.getLatitude()));
                     try {
-                        addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                        if(latLangNote == null)
+                            latLangNote = new LatLng(location.getLatitude(), location.getLongitude());
 
-                        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                        String city = addresses.get(0).getLocality();
-                        String state = addresses.get(0).getAdminArea();
-                        String country = addresses.get(0).getCountryName();
-                        String postalCode = addresses.get(0).getPostalCode();
-                        String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
-                        locationDetailsTV.setText(String.format("Accuracy: %s,Altitude: %s \n %s, %s, %s, %s, %s ,%s",
-                                location.getAccuracy(), location.getAltitude(), address, city, state, country, postalCode, knownName
-                        ));
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        addresses = geocoder.getFromLocation(latLangNote.latitude, latLangNote.longitude, 1);
+                        String address  = ""; // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+
+                        if (addresses != null && addresses.size() > 0) { // if the addressList gets a result
+                            address = ""; // empty the address message
+                            // street name
+                            if (addresses.get(0).getThoroughfare() != null) // if there is a street name
+                                address += addresses.get(0).getThoroughfare() + ", "; // add the street name
+                            if (addresses.get(0).getPostalCode() != null)  // if there is a postal code name
+                                address += addresses.get(0).getPostalCode() + ", "; // add the postal code name
+                            if (addresses.get(0).getLocality() != null)  // if there is a city name
+                                address += addresses.get(0).getLocality() + ", "; // add the city name
+                            if (addresses.get(0).getAdminArea() != null)  // if there is a province name
+                                address += addresses.get(0).getAdminArea(); // add the province name
+
+                        }
+                        locationDetailsTV.setText(address);
+                    } catch (Exception e) {
+                        e.printStackTrace(); // catch the error
                     }
 
 
                 }
             }
         };
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
     }
 
@@ -422,7 +447,7 @@ public class NoteDetailActivity extends AppCompatActivity {
                 if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
                     if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
                         new AlertDialog.Builder(NoteDetailActivity.this)
-                                .setMessage("The location permission is mandatory")
+                                .setMessage("The permission is mandatory")
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -435,8 +460,8 @@ public class NoteDetailActivity extends AppCompatActivity {
                     }
                 }
             }
-        } else if(requestCode == READ_EXTERNAL_STORAGE_CODE) {
-            if(grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        } else if (requestCode == READ_EXTERNAL_STORAGE_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 pickImageFromGalary();
             }
         }

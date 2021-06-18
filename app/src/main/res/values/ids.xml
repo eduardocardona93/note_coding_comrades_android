@@ -2,7 +2,4 @@
 <resources>
     <item name="playerBtn" type="id" />
     <item name="recorderBtn" type="id" />
-    <item name="longitudeTV" type="id" />
-    <item name="latitudeTV" type="id" />
-    <item name="locationDetailsTV" type="id" />
 </resources>

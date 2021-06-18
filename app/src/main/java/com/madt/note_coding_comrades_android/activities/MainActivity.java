@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     List<Address> addresses;
     
     private static final int UPDATE_INTERVAL = 5000; // 5 seconds
-    private static final int FASTEST_INTERVAL = 3000; // 3 seconds
+    private static final int FASTEST_INTERVAL = 2000; // 3 seconds
 
     private List<String> permissionsToRequest;
     private List<String> permissions = new ArrayList<>();
@@ -65,12 +65,13 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    Button btnPlay, btnRecord, btnPause;
+    Button btnPlay, btnRecord;
     String pathSave = "";
     MediaRecorder mediaRecorder;
     SeekBar scrubberSld;
     MediaPlayer mediaPlayer;
     AudioManager audioManager;
+
     Boolean isRecording = false, isPlaying = false;
     final private static String RECORDED_FILE = "/audio.3gp";
     @SuppressLint("WrongViewCast")
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         btnPlay = findViewById(R.id.playerBtn);
-        btnPause = findViewById(R.id.pauseBtn);
         btnPlay.setVisibility(View.GONE);
         btnRecord = findViewById(R.id.recorderBtn);
         scrubberSld = findViewById(R.id.scrubberSld);
@@ -203,8 +203,8 @@ public class MainActivity extends AppCompatActivity {
 
         // LOCATION INIT
         geocoder = new Geocoder(this,Locale.getDefault());
-        longitudeTV = findViewById(R.id.longitudeTV);
-        latitudeTV = findViewById(R.id.latitudeTV);
+//        longitudeTV = findViewById(R.id.longitudeTV);
+//        latitudeTV = findViewById(R.id.latitudeTV);
         locationDetailsTV = findViewById(R.id.locationDetailsTV);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
