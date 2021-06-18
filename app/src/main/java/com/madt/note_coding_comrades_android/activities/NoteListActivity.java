@@ -113,6 +113,19 @@ public class NoteListActivity extends AppCompatActivity {
                 getNoteLists(false, true,  false);
             }
         });
+        sortDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*Comparator<Note> compareByName = (Note n1, Note n2) ->
+                        n1.getNoteName().compareTo(n2.getNoteName());
+
+                Collections.sort(noteList, compareByName.reversed());
+                noteAdapter = new NoteAdapter(NoteListActivity.this, noteList);
+                rcNotes.setAdapter(noteAdapter);*/
+
+                getNoteLists(false, false,  true);
+            }
+        });
 
         noteAppViewModel = new ViewModelProvider.AndroidViewModelFactory(this.getApplication())
                 .create(NoteAppViewModel.class);

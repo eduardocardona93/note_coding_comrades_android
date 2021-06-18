@@ -34,7 +34,7 @@ public interface NoteDao {
     @Query("SELECT * FROM note WHERE noteCategoryId = :cateId AND note_name LIKE  '%' || :searchKey || '%'  ORDER BY  " +
             "CASE  WHEN :isAsc = 1 THEN note_name END ASC, " +
             "CASE WHEN :isDesc = 1 THEN note_name END DESC, " +
-            "CASE WHEN :byDate = 1 THEN note_name END DESC"
+            "CASE WHEN :byDate = 1 THEN note_date END DESC"
     )
     LiveData<List<Note>> getNotesForCategory(int cateId, boolean isAsc, boolean isDesc, String searchKey,boolean byDate);
 
