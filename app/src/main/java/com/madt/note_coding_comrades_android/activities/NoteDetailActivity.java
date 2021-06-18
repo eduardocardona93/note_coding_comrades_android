@@ -9,14 +9,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -85,6 +88,7 @@ public class NoteDetailActivity extends AppCompatActivity {
     private NoteAppViewModel noteAppViewModel;
     ArrayList<Note> noteList = new ArrayList<>();
     private int catID = 0;
+    private int noteId = 0;
     ImageButton btnPlay, btnRecord;
     ImageView btnBack, uploadImage, mapIcon;
     TextView saveTV;
@@ -236,8 +240,20 @@ public class NoteDetailActivity extends AppCompatActivity {
                          bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos);
                          imageInByte = baos.toByteArray();
                      }
-                    noteAppViewModel.insertNote(new Note(catID, title, detail,  imageInByte,recordFile , latLangNote.latitude ,latLangNote.longitude));
-
+                     if(noteId > 0){
+                         Note note = noteAppViewModel.getNoteById(noteId).getValue().get(0);
+                         note.setNoteCategoryId(catID);
+                         note.setNoteName(title);
+                         note.setNoteDetail(detail);
+                         note.setNoteLatitude(latLangNote.latitude);
+                         note.setNoteLongitude(latLangNote.longitude);
+                         if(recordFile != null)
+                            note.setNoteRecordingPath(recordFile);
+                         if(imageSet)
+                            note.setNoteImage(imageInByte);
+                         noteAppViewModel.update(note);
+                     }else
+                         noteAppViewModel.insertNote(new Note(catID, title, detail,  imageInByte,recordFile , latLangNote.latitude ,latLangNote.longitude));
                     finish();
                 }
             }
@@ -287,7 +303,25 @@ public class NoteDetailActivity extends AppCompatActivity {
 
 
         catID = getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0);
+        noteId = getIntent().getIntExtra("note_id", -1) ;
+        if(noteId  > 0){
 
+            latLangNote = new LatLng(getIntent().getDoubleExtra("note_latitude" , 0), getIntent().getDoubleExtra("note_longitude" , 0));
+            titleET.setText(getIntent().getStringExtra("note_name"));
+            detailET.setText(getIntent().getStringExtra("note_detail"));
+            recordFile = getIntent().getStringExtra("note_audio_path");
+            if(recordFile != null){
+                pathSave  = getExternalCacheDir().getAbsolutePath() + recordFile;
+                btnPlay.setVisibility(View.VISIBLE);
+                scrubberSld.setVisibility(View.VISIBLE);
+            }
+            byte[] noteImageArr = getIntent().getByteArrayExtra("note_image");
+            if(noteImageArr != null){
+                Drawable image = new BitmapDrawable(getResources(),BitmapFactory.decodeByteArray(noteImageArr, 0, noteImageArr.length));
+                uploadImage.setImageDrawable(image);
+                imageSet = true;
+            }
+        }
 
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -312,6 +346,7 @@ public class NoteDetailActivity extends AppCompatActivity {
                         if (result.getResultCode() == RESULT_OK) {
                             // There are no request codes
                             Intent data = result.getData();
+
                             uploadImage.setImageURI(data.getData());
                             imageSet = true;
                         }

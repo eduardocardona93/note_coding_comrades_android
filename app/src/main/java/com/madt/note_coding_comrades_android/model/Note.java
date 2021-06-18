@@ -44,6 +44,8 @@ public class Note {
     @ColumnInfo(name = "note_longitude")
     private Double noteLongitude;
 
+    
+    public Note(){}
 
     public Note(@NonNull int noteCategoryId, @NonNull String noteName, @NonNull String noteDetail, byte[] noteImage, String noteRecordingPath,@NonNull Double noteLatitude,@NonNull Double noteLongitude) {
         this.noteCategoryId = noteCategoryId;
@@ -119,5 +121,11 @@ public class Note {
 
     public void setNoteLongitude(Double noteLongitude) {
         this.noteLongitude = noteLongitude;
+    }
+
+
+    @Override
+    public String toString() {
+        return noteName;
     }
 }

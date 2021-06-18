@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.madt.note_coding_comrades_android.model.Category;
 import com.madt.note_coding_comrades_android.model.Note;
@@ -25,6 +26,9 @@ public interface NoteDao {
 
     @Query("SELECT * FROM note")
     LiveData<List<Note>> getAllNotes();
+
+    @Query("SELECT * FROM category WHERE cat_id <> :cateId")
+    LiveData<List<Category>> getAllCategoriesBut(int cateId);
 
  /*   @Transaction
     @Query("SELECT * FROM category")
@@ -53,4 +57,10 @@ public interface NoteDao {
 
     @Delete
     void deleteNote(Note note);
+
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    void update(Note note);
+
+    @Query("SELECT * FROM note WHERE note_id = :id LIMIT 1")
+    public LiveData<List<Note>> getNoteById(int id);
 }

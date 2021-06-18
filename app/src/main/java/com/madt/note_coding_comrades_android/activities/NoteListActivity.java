@@ -7,7 +7,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.madt.note_coding_comrades_android.R;
+import com.madt.note_coding_comrades_android.model.Category;
 import com.madt.note_coding_comrades_android.model.Note;
 import com.madt.note_coding_comrades_android.model.NoteAppViewModel;
 import com.madt.note_coding_comrades_android.utilities.NoteUtils;
@@ -29,6 +34,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
@@ -168,7 +175,7 @@ public class NoteListActivity extends AppCompatActivity {
         noteAdapter.filterList(filteredList);
     }
 
-    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -193,15 +200,41 @@ public class NoteListActivity extends AppCompatActivity {
             switch (direction) {
                 case ItemTouchHelper.LEFT:
                     // confirmation dialog to ask user before delete contact
-                    AlertDialog.Builder builder = new AlertDialog.Builder(NoteListActivity.this);
-                    builder.setTitle("Are you sure you want to delete this contact?");
-                    builder.setPositiveButton("Yes", (dialog, which) -> {
+                    AlertDialog.Builder builderL = new AlertDialog.Builder(NoteListActivity.this);
+                    builderL.setTitle("Are you sure you want to delete this contact?");
+                    builderL.setPositiveButton("Yes", (dialog, which) -> {
                         noteAppViewModel.delete(noteList.get(position));
                     });
-                    builder.setNegativeButton("No", (dialog, which) -> noteAdapter.notifyDataSetChanged());
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
+                    builderL.setNegativeButton("No", (dialog, which) -> noteAdapter.notifyDataSetChanged());
+                    AlertDialog alertDialogL = builderL.create();
+                    alertDialogL.show();
                     break;
+                case  ItemTouchHelper.RIGHT:
+                    AlertDialog.Builder builderR = new AlertDialog.Builder(NoteListActivity.this);
+                    LayoutInflater layoutInflater = LayoutInflater.from(NoteListActivity.this);
+                    View view = layoutInflater.inflate(R.layout.dialog_move_note_category, null);
+                    builderR.setView(view);
+
+                    final AlertDialog alertDialogR = builderR.create();
+                    alertDialogR.show();
+
+                    Spinner otherCategoriesSp = view.findViewById(R.id.otherCategoriesSp);
+                    List<Category> otherCats = noteAppViewModel.getAllCategoriesBut(catId).getValue();
+                    ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, otherCats);
+                    adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+
+                    otherCategoriesSp.setAdapter(adapter);
+                    Button btnChange = view.findViewById(R.id.btnCreateCategory);
+
+                    btnChange.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final Note note = noteList.get(position);
+                            final Category category = otherCats.get(otherCategoriesSp.getSelectedItemPosition());
+                            note.setNoteCategoryId(category.getCatId());
+                            noteAppViewModel.update(note);
+                        }
+                    });
             }
         }
 
@@ -210,6 +243,7 @@ public class NoteListActivity extends AppCompatActivity {
             new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     .setIconHorizontalMargin(1, 1)
                     .addSwipeLeftActionIcon(R.drawable.ic_delete)
+                    .addSwipeRightActionIcon(R.drawable.amu_bubble_mask)
                     .create()
                     .decorate();
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
@@ -276,7 +310,7 @@ public class NoteListActivity extends AppCompatActivity {
             System.out.println("Converted String: " + strDate);
 
             holder.noteTitle.setText(noteList.get(position).getNoteName());
-            holder.categoryName.setText("Catepgry");
+            holder.categoryName.setText("Category");
             holder.noteCreationDate.setText(strDate);
 
             holder.bind(noteList.get(position));
@@ -305,12 +339,16 @@ public class NoteListActivity extends AppCompatActivity {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(NoteListActivity.this, AddEditNoteActivity.class);
+                        Intent intent = new Intent(NoteListActivity.this, NoteDetailActivity.class);
                         intent.putExtra("note_id", note.getNoteId());
                         intent.putExtra("noteCategoryId", note.getNoteCategoryId());
                         intent.putExtra("note_name", note.getNoteName());
                         intent.putExtra("note_detail", note.getNoteDetail());
                         intent.putExtra("note_image", note.getNoteImage());
+                        intent.putExtra("note_audio_path", note.getNoteRecordingPath());
+                        intent.putExtra("note_longitude", note.getNoteLongitude());
+                        intent.putExtra("note_latitude", note.getNoteLatitude());
+
                         startActivity(intent);
                     }
                 });

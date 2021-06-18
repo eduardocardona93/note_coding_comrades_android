@@ -25,6 +25,9 @@ public class NoteAppRepository {
     public LiveData<List<Category>> getAllCategories() {
         return allCategories;
     }
+    public LiveData<List<Category>> getAllCategoriesBut(int cateId) {
+        return noteDao.getAllCategoriesBut(cateId);
+    }
 
     public LiveData<List<Note>> getAllNotes() {
         return allNotes;
@@ -49,7 +52,14 @@ public class NoteAppRepository {
   public LiveData<List<Note>> getNotesByCategory(int catId) {
        return noteDao.getNotesForCategory(catId);
     }
+    // updates a note
+    public void update(Note note) {
+        NoteRoomDB.databaseWriteExecutor.execute(() -> noteDao.update(note));
+    }
 
+    public LiveData<List<Note>> getNoteById(int id){
+        return noteDao.getNoteById(id);
+    }
 }
 
 
