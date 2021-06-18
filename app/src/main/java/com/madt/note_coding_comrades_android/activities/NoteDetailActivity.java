@@ -488,7 +488,6 @@ public class NoteDetailActivity extends AppCompatActivity {
 
             if (permissionsRejected.size() > 0) {
                 if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
-                    if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
                         new AlertDialog.Builder(NoteDetailActivity.this)
                                 .setMessage("The permission is mandatory")
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -500,8 +499,9 @@ public class NoteDetailActivity extends AppCompatActivity {
                                 }).setNegativeButton("Cancel", null)
                                 .create()
                                 .show();
-                    }
                 }
+            }else{
+                startUpdateLocation();
             }
         } else if (requestCode == READ_EXTERNAL_STORAGE_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
