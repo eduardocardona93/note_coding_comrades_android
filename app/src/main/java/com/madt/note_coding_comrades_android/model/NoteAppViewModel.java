@@ -14,7 +14,7 @@ import java.util.List;
 public class NoteAppViewModel extends AndroidViewModel {
     private NoteAppRepository repository;
     private final LiveData<List<Category>> allCategories;
-    private final LiveData<List<Note>> allNotes;
+    private  LiveData<List<Note>> allNotes;
 
     public NoteAppViewModel(@NonNull Application application) {
         super(application);
@@ -26,7 +26,12 @@ public class NoteAppViewModel extends AndroidViewModel {
 
     public LiveData<List<Category>> getAllCategories() {return allCategories;}
     public LiveData<List<Note>> getAllNotes() {return allNotes;}
-    public LiveData<List<Note>> getNotesByCategory(int catId) {return repository.getNotesByCategory(catId);}
+    public LiveData<List<Note>> getNotesByCategory(int catId, boolean isAsc,boolean isDesc, String searchKey,boolean byDate) {
+        allNotes=repository.getNotesByCategory(catId,isAsc,isDesc,searchKey,byDate);
+        return allNotes;}
+        public LiveData<List<Note>> getNotesByCategory(int catId) {
+        allNotes=repository.getNotesByCategory(catId);
+        return allNotes;}
     public void insertCategory(Category category){repository.insertCategory(category);}
     public void insertNote(Note note) {repository.insertNote(note);}
     public void delete(Note note) {repository.delete(note);}

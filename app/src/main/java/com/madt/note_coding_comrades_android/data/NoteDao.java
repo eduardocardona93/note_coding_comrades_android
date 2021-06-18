@@ -6,10 +6,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Transaction;
 
 import com.madt.note_coding_comrades_android.model.Category;
-import com.madt.note_coding_comrades_android.model.CategoryHavingNotes;
 import com.madt.note_coding_comrades_android.model.Note;
 
 import java.util.List;
@@ -32,9 +30,21 @@ public interface NoteDao {
     @Query("SELECT * FROM category")
     public   LiveData<List<CategoryHavingNotes>> getNotesForCategory();
 */
+
+
+    @Query("SELECT * FROM note WHERE noteCategoryId = :cateId AND note_name LIKE  '%' || :searchKey || '%'  ORDER BY  " +
+            "CASE  WHEN :isAsc = 1 THEN note_name END ASC, " +
+            "CASE WHEN :isDesc = 1 THEN note_name END DESC, " +
+            "CASE WHEN :byDate = 1 THEN note_name END DESC"
+    )
+    LiveData<List<Note>> getNotesForCategory(int cateId, boolean isAsc, boolean isDesc, String searchKey,boolean byDate);
+
+    @Query("SELECT * FROM note WHERE noteCategoryId = :cateId AND note_name LIKE :searchKey")
+    public List<Note> getNotesBySearch(int cateId, String searchKey);
+
+
     @Query("SELECT * FROM note WHERE noteCategoryId = :cateId")
     LiveData<List<Note>> getNotesForCategory(int cateId);
-
     @Query("DELETE FROM note")
     void deleteAll();
 

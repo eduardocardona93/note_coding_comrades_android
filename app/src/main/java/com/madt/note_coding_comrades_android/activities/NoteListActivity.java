@@ -28,8 +28,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
@@ -46,6 +44,8 @@ public class NoteListActivity extends AppCompatActivity {
     public static final String CATEGORY_ID = "cate_id";
     SearchView searchView;
     private NoteAdapter noteAdapter;
+    private int catId;
+    private String searchKey="";
 
 
     @Override
@@ -61,15 +61,17 @@ public class NoteListActivity extends AppCompatActivity {
         rcNotes.setHasFixedSize(true);
         rcNotes.setLayoutManager(new LinearLayoutManager(this));
 
+        catId = getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0);
+
         createNote.setOnClickListener(v -> {
 
             Intent intent = new Intent(getBaseContext(), NoteDetailActivity.class);
-            intent.putExtra(NoteListActivity.CATEGORY_ID,getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0));
+            intent.putExtra(NoteListActivity.CATEGORY_ID, getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0));
             startActivity(intent);
         });
 
         findViewById(R.id.imgBack).setOnClickListener(v -> {
-          finish();
+            finish();
         });
 
         sortAZ = findViewById(R.id.sortAZ);
@@ -79,24 +81,27 @@ public class NoteListActivity extends AppCompatActivity {
         sortAZ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Comparator<Note> compareByName = (Note n1, Note n2) ->
-                        n1.getNoteName().compareTo( n2.getNoteName() );
+              /*  Comparator<Note> compareByName = (Note n1, Note n2) ->
+                        n1.getNoteName().compareTo(n2.getNoteName());
 
                 Collections.sort(noteList, compareByName);
                 noteAdapter = new NoteAdapter(NoteListActivity.this, noteList);
-                rcNotes.setAdapter(noteAdapter);
+                rcNotes.setAdapter(noteAdapter);*/
+                getNoteLists(true, false,  false);
             }
         });
 
         sortZA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Comparator<Note> compareByName = (Note n1, Note n2) ->
-                        n1.getNoteName().compareTo( n2.getNoteName() );
+                /*Comparator<Note> compareByName = (Note n1, Note n2) ->
+                        n1.getNoteName().compareTo(n2.getNoteName());
 
                 Collections.sort(noteList, compareByName.reversed());
                 noteAdapter = new NoteAdapter(NoteListActivity.this, noteList);
-                rcNotes.setAdapter(noteAdapter);
+                rcNotes.setAdapter(noteAdapter);*/
+
+                getNoteLists(false, true,  false);
             }
         });
 
@@ -119,16 +124,11 @@ public class NoteListActivity extends AppCompatActivity {
             noteAdapter = new NoteAdapter(this, noteList);
             rcNotes.setAdapter(noteAdapter);
         });*/
-        noteAppViewModel.getNotesByCategory(getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0)).observe(this, notes -> {
-            noteList.clear();
-            noteList.addAll(notes);
+        noteAdapter = new NoteAdapter(this, noteList);
+        rcNotes.setAdapter(noteAdapter);
 
-            NoteUtils.showLog("list size", noteList.size() + "");
-            NoteUtils.showLog("db list size", noteList.size() + "");
+        getNoteLists(true, false,  false);
 
-            noteAdapter = new NoteAdapter(this, noteList);
-            rcNotes.setAdapter(noteAdapter);
-        });
         // below line is to call set on query text listener method.
         searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
@@ -139,7 +139,9 @@ public class NoteListActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 //Calling a method to filter Note List
-                filter(newText);
+                // filter(newText);
+                searchKey = newText;
+                getNoteLists(true, false,  false);
                 return false;
             }
         });
@@ -175,29 +177,26 @@ public class NoteListActivity extends AppCompatActivity {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            NoteUtils.showLog("in", "swipe");
-            NoteUtils.showLog("in", "swipe : " + getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0));
+
             int position = viewHolder.getAdapterPosition();
             /*final Note[] contact = new Note[1];
             noteAppViewModel.getNotesByCategory(getIntent().getIntExtra(NoteListActivity.CATEGORY_ID, 0)).observe(this, notes -> {
                 contact[0] = notes.get(position);
             });*/
 
-            Note contact;
+         /*   Note contact;
             if(filteredList.size() == 0){
                 contact = noteList.get(position);
             } else {
                 contact = filteredList.get(position);
-            }
+            }*/
             switch (direction) {
                 case ItemTouchHelper.LEFT:
                     // confirmation dialog to ask user before delete contact
                     AlertDialog.Builder builder = new AlertDialog.Builder(NoteListActivity.this);
                     builder.setTitle("Are you sure you want to delete this contact?");
                     builder.setPositiveButton("Yes", (dialog, which) -> {
-
-                        noteAppViewModel.delete(contact);
-
+                        noteAppViewModel.delete(noteList.get(position));
                     });
                     builder.setNegativeButton("No", (dialog, which) -> noteAdapter.notifyDataSetChanged());
                     AlertDialog alertDialog = builder.create();
@@ -216,6 +215,31 @@ public class NoteListActivity extends AppCompatActivity {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     };
+
+
+    public void getNoteLists(boolean isAsc, boolean isDesc, boolean byDate) {
+        NoteUtils.showLog("get Notes : ", catId + "::" + isAsc + "::" + isDesc + "::" + searchKey + "::" + byDate);
+        noteAppViewModel.getNotesByCategory(catId, isAsc, isDesc, searchKey, byDate).observe(this, notes -> {
+            noteList.clear();
+            noteList.addAll(notes);
+
+            NoteUtils.showLog("list size", noteList.size() + "");
+            NoteUtils.showLog("db list size", noteList.size() + "");
+
+            noteAdapter.notifyDataSetChanged();
+
+        });
+    /*    noteAppViewModel.getNotesByCategory(catId).observe(this, notes -> {
+            noteList.clear();
+            noteList.addAll(notes);
+
+            NoteUtils.showLog("list size", noteList.size() + "");
+            NoteUtils.showLog("db list size", noteList.size() + "");
+
+            noteAdapter.notifyDataSetChanged();
+
+        });*/
+    }
 
     class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
@@ -279,7 +303,8 @@ public class NoteListActivity extends AppCompatActivity {
 
             public void bind(Note note) {
                 itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         Intent intent = new Intent(NoteListActivity.this, AddEditNoteActivity.class);
                         intent.putExtra("note_id", note.getNoteId());
                         intent.putExtra("noteCategoryId", note.getNoteCategoryId());

@@ -43,7 +43,10 @@ public class NoteAppRepository {
         NoteRoomDB.databaseWriteExecutor.execute(() -> noteDao.deleteNote(note));
     }
 
-    public LiveData<List<Note>> getNotesByCategory(int catId) {
+    public LiveData<List<Note>> getNotesByCategory(int catId, boolean isAsc,boolean isDesc, String searchKey,boolean byDate) {
+       return noteDao.getNotesForCategory(catId,isAsc,isDesc,searchKey,byDate);
+    }
+  public LiveData<List<Note>> getNotesByCategory(int catId) {
        return noteDao.getNotesForCategory(catId);
     }
 
