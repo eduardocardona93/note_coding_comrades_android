@@ -36,7 +36,7 @@ public interface NoteDao {
             "CASE WHEN :isDesc = 1 THEN note_name END DESC, " +
             "CASE WHEN :byDate = 1 THEN note_date END DESC"
     )
-    LiveData<List<Note>> getNotesForCategory(int cateId, boolean isAsc, boolean isDesc, String searchKey,boolean byDate);
+    LiveData<List<Note>> getNotesForCategory(int cateId, boolean isAsc, boolean isDesc, String searchKey, boolean byDate);
 
     @Query("SELECT * FROM note WHERE noteCategoryId = :cateId AND note_name LIKE :searchKey")
     public List<Note> getNotesBySearch(int cateId, String searchKey);
@@ -44,6 +44,7 @@ public interface NoteDao {
 
     @Query("SELECT * FROM note WHERE noteCategoryId = :cateId")
     LiveData<List<Note>> getNotesForCategory(int cateId);
+
     @Query("DELETE FROM note")
     void deleteAll();
 
@@ -56,6 +57,12 @@ public interface NoteDao {
     @Update(onConflict = OnConflictStrategy.IGNORE)
     void update(Note note);
 
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    void updateCategory(Category category);
+
     @Query("SELECT * FROM note WHERE note_id = :id LIMIT 1")
     public LiveData<Note> getNoteById(int id);
+
+    @Query("SELECT * FROM category WHERE cat_id = :id LIMIT 1")
+    public LiveData<Category> getCategoryById(int id);
 }

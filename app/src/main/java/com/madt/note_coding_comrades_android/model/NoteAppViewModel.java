@@ -62,7 +62,14 @@ public class NoteAppViewModel extends AndroidViewModel {
         repository.update(note);
     }
 
+    public void updateCategory(Category category) {
+        repository.updateCategory(category);
+    }
+
     public LiveData<Note> getNoteById(int id) {
         return repository.getNoteById(id);
+    }
+    public LiveData<Category> getCategoryById(int id) {
+        return repository.getCategoryById(id);
     }
 }
