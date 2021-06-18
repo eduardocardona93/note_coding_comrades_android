@@ -139,13 +139,13 @@ public class CategoryListActivity extends AppCompatActivity {
                 }
             });
 
-            holder.categoryNameTV.setOnLongClickListener(new View.OnLongClickListener() {
+            /*holder.categoryNameTV.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     renameCategoryDialog(categoryList.get(position).getCatId());
                     return false;
                 }
-            });
+            });*/
 
 
         }
@@ -207,6 +207,7 @@ public class CategoryListActivity extends AppCompatActivity {
 
                     });
 
+                    //rcCategories.setAdapter(new CategoryAdapter(CategoryHavingNotes.this, categoryList));
 
                 }
             });
