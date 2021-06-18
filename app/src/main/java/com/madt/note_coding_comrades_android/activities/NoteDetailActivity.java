@@ -54,7 +54,11 @@ import com.madt.note_coding_comrades_android.model.NoteAppViewModel;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -223,6 +227,12 @@ public class NoteDetailActivity extends AppCompatActivity {
         saveTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Date date = Calendar.getInstance().getTime();
+                DateFormat dateFormat = new SimpleDateFormat("dd MMMM, yyyy hh:mm aa");
+                String strDate = dateFormat.format(date);
+                System.out.println("Converted String: " + strDate);
+
+
                 String title = titleET.getText().toString().trim();
                 String detail = detailET.getText().toString().trim();
 
@@ -253,7 +263,9 @@ public class NoteDetailActivity extends AppCompatActivity {
                             note.setNoteImage(imageInByte);
                          noteAppViewModel.update(note);
                      }else
-                         noteAppViewModel.insertNote(new Note(catID, title, detail,  imageInByte,recordFile , latLangNote.latitude ,latLangNote.longitude));
+
+
+                         noteAppViewModel.insertNote(new Note(catID, title, detail,  imageInByte,recordFile , latLangNote.latitude ,latLangNote.longitude,strDate));
                     finish();
                 }
             }

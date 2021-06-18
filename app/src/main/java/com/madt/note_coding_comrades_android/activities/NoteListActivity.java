@@ -323,14 +323,10 @@ public class NoteListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull NoteListActivity.NoteAdapter.ViewHolder holder, int position) {
-            Date date = Calendar.getInstance().getTime();
-            DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
-            String strDate = dateFormat.format(date);
-            System.out.println("Converted String: " + strDate);
 
             holder.noteTitle.setText(noteList.get(position).getNoteName());
             holder.categoryName.setText("Category");
-            holder.noteCreationDate.setText(strDate);
+            holder.noteCreationDate.setText(noteList.get(position).getNoteDate());
 
             holder.bind(noteList.get(position));
         }

@@ -44,10 +44,23 @@ public class Note {
     @ColumnInfo(name = "note_longitude")
     private Double noteLongitude;
 
+    @NonNull
+    public String getNoteDate() {
+        return noteDate;
+    }
+
+    public void setNoteDate(@NonNull String noteDate) {
+        this.noteDate = noteDate;
+    }
+
+    @NonNull
+    @ColumnInfo(name = "note_date")
+    private String noteDate;
+
     
     public Note(){}
 
-    public Note(@NonNull int noteCategoryId, @NonNull String noteName, @NonNull String noteDetail, byte[] noteImage, String noteRecordingPath,@NonNull Double noteLatitude,@NonNull Double noteLongitude) {
+    public Note(@NonNull int noteCategoryId, @NonNull String noteName, @NonNull String noteDetail, byte[] noteImage, String noteRecordingPath,@NonNull Double noteLatitude,@NonNull Double noteLongitude,String noteDate) {
         this.noteCategoryId = noteCategoryId;
         this.noteName = noteName;
         this.noteDetail = noteDetail;
@@ -55,6 +68,7 @@ public class Note {
         this.noteRecordingPath = noteRecordingPath;
         this.noteLatitude = noteLatitude;
         this.noteLongitude = noteLongitude;
+        this.noteDate=noteDate;
     }
 
     public int getNoteId() {
