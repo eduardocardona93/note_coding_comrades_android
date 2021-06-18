@@ -95,8 +95,7 @@ public class NoteDetailActivity extends AppCompatActivity {
     SeekBar scrubberSld;
     MediaPlayer mediaPlayer;
     AudioManager audioManager;
-    Boolean isRecording = false, isPlaying = false;
-    final private static String RECORDED_FILE = "/audio.3gp";
+    Boolean isRecording = false, isPlaying = false, imageSet = false;
 
     ActivityResultLauncher<Intent> someActivityResultLauncher;
 
@@ -227,18 +226,16 @@ public class NoteDetailActivity extends AppCompatActivity {
                     alertBox("Title can not be empty!");
                 } else if (detail.isEmpty()) {
                     alertBox("Description can not be empty!");
-                } else {
+                }else if (latLangNote == null) {
+                    alertBox("Wait until the location is set");
+                 } else {
                      byte[] imageInByte = null;
-                     if(uploadImage.getDrawable() != null){
+                     if(imageSet){
                          Bitmap bitmap = ((BitmapDrawable) uploadImage.getDrawable()).getBitmap();
                          ByteArrayOutputStream baos = new ByteArrayOutputStream();
                          bitmap.compress(Bitmap.CompressFormat.JPEG, 10, baos);
                          imageInByte = baos.toByteArray();
                      }
-                     if(recordFile != null){
-
-                     }
-
                     noteAppViewModel.insertNote(new Note(catID, title, detail,  imageInByte,recordFile , latLangNote.latitude ,latLangNote.longitude));
 
                     finish();
@@ -306,6 +303,7 @@ public class NoteDetailActivity extends AppCompatActivity {
                             // There are no request codes
                             Intent data = result.getData();
                             uploadImage.setImageURI(data.getData());
+                            imageSet = true;
                         }
                     }
                 });
