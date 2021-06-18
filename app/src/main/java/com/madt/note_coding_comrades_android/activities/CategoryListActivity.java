@@ -143,6 +143,7 @@ public class CategoryListActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(getBaseContext(), NoteListActivity.class);
                     intent.putExtra(NoteListActivity.CATEGORY_ID, categoryList.get(position).getCatId());
+                    intent.putExtra(NoteListActivity.CATEGORY_NAME, categoryList.get(position).getCatName());
                     startActivity(intent);
                 }
             });

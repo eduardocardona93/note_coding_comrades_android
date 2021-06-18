@@ -52,6 +52,7 @@ public class NoteAppRepository {
   public LiveData<List<Note>> getNotesByCategory(int catId) {
        return noteDao.getNotesForCategory(catId);
     }
+
     // updates a note
     public void update(Note note) {
         NoteRoomDB.databaseWriteExecutor.execute(() -> noteDao.update(note));

@@ -30,11 +30,6 @@ public interface NoteDao {
     @Query("SELECT * FROM category WHERE cat_id <> :cateId")
     LiveData<List<Category>> getAllCategoriesBut(int cateId);
 
- /*   @Transaction
-    @Query("SELECT * FROM category")
-    public   LiveData<List<CategoryHavingNotes>> getNotesForCategory();
-*/
-
 
     @Query("SELECT * FROM note WHERE noteCategoryId = :cateId AND note_name LIKE  '%' || :searchKey || '%'  ORDER BY  " +
             "CASE  WHEN :isAsc = 1 THEN note_name END ASC, " +

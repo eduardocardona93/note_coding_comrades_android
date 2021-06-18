@@ -50,6 +50,7 @@ public class NoteListActivity extends AppCompatActivity {
     ArrayList<Note> noteList = new ArrayList<>();
     ArrayList<Note> filteredList = new ArrayList<>();
     public static final String CATEGORY_ID = "cate_id";
+    public static final String CATEGORY_NAME = "cate_name";
     SearchView searchView;
     private NoteAdapter noteAdapter;
     private int catId;
@@ -282,16 +283,7 @@ public class NoteListActivity extends AppCompatActivity {
             noteAdapter.notifyDataSetChanged();
 
         });
-    /*    noteAppViewModel.getNotesByCategory(catId).observe(this, notes -> {
-            noteList.clear();
-            noteList.addAll(notes);
 
-            NoteUtils.showLog("list size", noteList.size() + "");
-            NoteUtils.showLog("db list size", noteList.size() + "");
-
-            noteAdapter.notifyDataSetChanged();
-
-        });*/
     }
 
     class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
@@ -325,7 +317,7 @@ public class NoteListActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull NoteListActivity.NoteAdapter.ViewHolder holder, int position) {
 
             holder.noteTitle.setText(noteList.get(position).getNoteName());
-            holder.categoryName.setText("Category");
+            holder.categoryName.setText(getIntent().getStringExtra(NoteListActivity.CATEGORY_NAME));
             holder.noteCreationDate.setText(noteList.get(position).getNoteDate());
 
             holder.bind(noteList.get(position));
