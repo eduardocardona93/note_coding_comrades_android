@@ -57,5 +57,5 @@ public interface NoteDao {
     void update(Note note);
 
     @Query("SELECT * FROM note WHERE note_id = :id LIMIT 1")
-    public LiveData<List<Note>> getNoteById(int id);
+    public LiveData<Note> getNoteById(int id);
 }

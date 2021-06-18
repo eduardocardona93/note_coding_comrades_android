@@ -58,7 +58,7 @@ public class NoteAppRepository {
         NoteRoomDB.databaseWriteExecutor.execute(() -> noteDao.update(note));
     }
 
-    public LiveData<List<Note>> getNoteById(int id){
+    public LiveData<Note> getNoteById(int id){
         return noteDao.getNoteById(id);
     }
 }

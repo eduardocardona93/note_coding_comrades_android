@@ -62,7 +62,7 @@ public class NoteAppViewModel extends AndroidViewModel {
         repository.update(note);
     }
 
-    public LiveData<List<Note>> getNoteById(int id) {
+    public LiveData<Note> getNoteById(int id) {
         return repository.getNoteById(id);
     }
 }

@@ -251,20 +251,21 @@ public class NoteDetailActivity extends AppCompatActivity {
                          imageInByte = baos.toByteArray();
                      }
                      if(noteId > 0){
-                         Note note = noteAppViewModel.getNoteById(noteId).getValue().get(0);
-                         note.setNoteCategoryId(catID);
-                         note.setNoteName(title);
-                         note.setNoteDetail(detail);
-                         note.setNoteLatitude(latLangNote.latitude);
-                         note.setNoteLongitude(latLangNote.longitude);
-                         if(recordFile != null)
-                            note.setNoteRecordingPath(recordFile);
-                         if(imageSet)
-                            note.setNoteImage(imageInByte);
-                         noteAppViewModel.update(note);
+                         byte[] finalImageInByte = imageInByte;
+                         noteAppViewModel.getNoteById(noteId).observe(NoteDetailActivity.this, note -> {
+                             note.setNoteCategoryId(note.getNoteCategoryId());
+                             note.setNoteName(title);
+                             note.setNoteDetail(detail);
+                             note.setNoteLatitude(latLangNote.latitude);
+                             note.setNoteLongitude(latLangNote.longitude);
+                             if(recordFile != null)
+                                 note.setNoteRecordingPath(recordFile);
+                             if(imageSet)
+                                 note.setNoteImage(finalImageInByte);
+                             noteAppViewModel.update(note);
+                         });
+
                      }else
-
-
                          noteAppViewModel.insertNote(new Note(catID, title, detail,  imageInByte,recordFile , latLangNote.latitude ,latLangNote.longitude,strDate));
                     finish();
                 }
